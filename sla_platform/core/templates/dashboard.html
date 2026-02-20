@@ -1,0 +1,56 @@
+<h1>SLA Enterprise Dashboard</h1>
+<h3>Notifications</h3>
+{% for n in notifications %}
+    <div style="background:#222;color:white;padding:8px;margin:5px;">
+        {{ n.message }}
+    </div>
+{% empty %}
+    <p>No new notifications</p>
+{% endfor %}
+<p>Logged in as: {{ request.user.username }}</p>
+
+<table border="1" cellpadding="10">
+<tr>
+    <th>ID</th>
+    <th>Client</th>
+    <th>Category</th>
+    <th>Priority</th>
+    <th>Status</th>
+    <th>SLA Status</th>
+    <th>Remaining (hrs)</th>
+    <th>Usage %</th>
+    <th>Assigned</th>
+    <th>Action</th>
+</tr>
+
+{% for item in tickets %}
+<tr>
+    <td>{{ item.ticket.id }}</td>
+    <td>{{ item.ticket.client.name }}</td>
+    <td>{{ item.ticket.category }}</td>
+    <td>{{ item.ticket.priority }}</td>
+    <td>{{ item.ticket.status }}</td>
+    <td>{{ item.sla_status }}</td>
+    <td>{{ item.remaining_hours }}</td>
+    <td>{{ item.usage_percent }}%</td>
+    <td>
+        {% if item.ticket.assigned_to %}
+            {{ item.ticket.assigned_to.username }}
+        {% else %}
+            Not Assigned
+        {% endif %}
+    </td>
+    <td>
+        {% if is_engineer %}
+            <a href="{% url 'update_ticket_status' item.ticket.id %}">
+                Update
+            </a>
+        {% else %}
+            -
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<h3>Total Tickets: {{ tickets|length }}</h3>

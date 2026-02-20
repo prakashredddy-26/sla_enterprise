@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Client Dashboard</title>
+</head>
+<body>
+
+<h2>Client Dashboard</h2>
+
+<h3>Your Tickets</h3>
+{% if item.ticket.status == "RESOLVED" %}
+    <a href="{% url 'reopen_ticket' item.ticket.id %}">
+        Reopen
+    </a>
+{% endif %}
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Description</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Risk Level</th>
+    </tr>
+
+    {% for ticket in tickets %}
+    <tr>
+        <td>{{ ticket.id }}</td>
+        <td>{{ ticket.description }}</td>
+        <td>{{ ticket.priority }}</td>
+        <td>{{ ticket.status }}</td>
+        <td>{{ ticket.risk_level }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">No tickets found.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

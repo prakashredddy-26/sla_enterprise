@@ -1,0 +1,16 @@
+<h2>Update Ticket #{{ ticket.id }}</h2>
+
+<p><b>Description:</b> {{ ticket.description }}</p>
+<p><b>Priority:</b> {{ ticket.priority }}</p>
+<p><b>Status:</b> {{ ticket.status }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <select name="status">
+        <option value="IN_PROGRESS">Mark as In Progress</option>
+        <option value="RESOLVED">Mark as Resolved</option>
+    </select>
+    <button type="submit">Update</button>
+</form>
+
+<a href="{% url 'dashboard' %}">Back</a>
