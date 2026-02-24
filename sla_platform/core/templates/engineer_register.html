@@ -1,16 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Engineer Register</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Engineer Register | SLA Governance</title>
+  <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
 </head>
 <body>
-    <h2>Engineer Register</h2>
-    <form method="POST">
-        {% csrf_token %}
-        Username: <input type="text" name="username"><br>
-        Email: <input type="email" name="email"><br>
-        Password: <input type="password" name="password"><br>
-        <button type="submit">Register</button>
-    </form>
+  <div class="auth">
+    <div class="auth-card">
+      <div class="auth-left">
+        <h1 class="auth-title">Engineer Registration</h1>
+        <p class="auth-sub">Create an engineer account to work on assigned tickets.</p>
+
+        <form method="POST" action="{% url 'engineer_register' %}">
+          {% csrf_token %}
+
+          <label class="label">Username</label>
+          <input class="input" type="text" name="username" required placeholder="Engineer username">
+
+          <div style="height:12px;"></div>
+
+          <label class="label">Email</label>
+          <input class="input" type="email" name="email" required placeholder="engineer@example.com">
+
+          <div style="height:12px;"></div>
+
+          <label class="label">Password</label>
+          <input class="input" type="password" name="password" required placeholder="Create password">
+
+          <div style="height:14px;"></div>
+
+          <button class="btn" type="submit">🛠️ Register Engineer</button>
+          <a class="btn secondary" href="{% url 'login' %}">Back to Login</a>
+        </form>
+      </div>
+
+      <div class="auth-right">
+        <h3 style="margin:0 0 10px;">Engineer Workflow</h3>
+        <ul class="small" style="margin:0; padding-left:18px;">
+          <li>View assigned tickets on Dashboard</li>
+          <li>Update ticket status to IN_PROGRESS / RESOLVED</li>
+          <li>Notifications generated on assignment & reopen</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

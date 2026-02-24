@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>{% block title %}Engineer | SLA Enterprise{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+  <script defer src="{% static 'core/js/app.js' %}"></script>
+</head>
+
+<!-- ✅ Light theme only for ENGINEER pages -->
+<body class="engineer-theme-light">
+  <div class="app">
+    <!-- ✅ add id="sidebar" so hamburger works with your app.js -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">E</div>
+        <div>
+          <div class="brand-title">Engineer Console</div>
+          <div class="brand-sub">Assigned Tickets & Updates</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="nav-item" href="{% url 'dashboard' %}">📊 Assigned Tickets</a>
+        <a class="nav-item" href="/api/engineer-performance/" target="_blank">📈 Performance API</a>
+        <a class="nav-item" href="{% url 'logout' %}">🚪 Logout</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        Tip: Updating status creates Audit logs automatically.
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="top-left">
+          <button class="icon-btn" id="toggleSidebar" type="button" aria-label="Toggle sidebar">☰</button>
+          <div class="page-title">
+            {% block page_title %}Engineer Console{% endblock %}
+            <div class="page-subtitle">{% block page_subtitle %}Work on assigned SLA tickets{% endblock %}</div>
+          </div>
+        </div>
+
+        <div class="top-right">
+          <div class="chip"><span class="dot"></span><span>Ops Online</span></div>
+
+          <!-- ✅ Clickable profile avatar -->
+          <button class="avatar avatar-btn" id="profileBtn" type="button"
+                  aria-haspopup="true" aria-expanded="false"
+                  title="{{ request.user.username }}">
+            {{ request.user.username|slice:":1"|upper }}
+          </button>
+
+          <!-- ✅ Profile dropdown -->
+          <div class="profile-menu" id="profileMenu" aria-hidden="true">
+            <div class="profile-head">
+              <div class="profile-avatar">{{ request.user.username|slice:":1"|upper }}</div>
+              <div>
+                <div class="profile-name">{{ request.user.username }}</div>
+                <div class="profile-email">
+                  {% if request.user.email %}{{ request.user.email }}{% else %}No email set{% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-actions">
+              <a class="profile-link" href="{% url 'password_change' %}">🔒 Change Password</a>
+              <a class="profile-link danger" href="{% url 'logout' %}">🚪 Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+        {% block content %}{% endblock %}
+      </section>
+    </main>
+  </div>
+</body>
+</html>

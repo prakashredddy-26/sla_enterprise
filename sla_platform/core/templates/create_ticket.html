@@ -1,113 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Ticket</title>
-    <style>
-        body {
-            font-family: Arial;
-            background-color: #f4f6f9;
-        }
+{% extends "base_client.html" %}
+{% block title %}Client | Create Ticket{% endblock %}
+{% block page_title %}Create Ticket{% endblock %}
+{% block page_subtitle %}Auto-routing + load-balanced engineer assignment{% endblock %}
 
-        .container {
-            width: 600px;
-            margin: 40px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-        }
+{% block content %}
+<div class="grid">
+  <div class="card col-8">
+    <div style="font-weight:950; font-size:16px;">➕ Raise a New SLA Ticket</div>
+    <div class="small">Fill the form — the system will auto-assign the best engineer.</div>
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    <div style="height:14px;"></div>
 
-        label {
-            font-weight: bold;
-        }
+    <form method="POST" action="{% url 'create_ticket' %}">
+      {% csrf_token %}
 
-        select, textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+      <label class="label">Category</label>
+      <select class="select" name="category" required>
+        <option value="" selected disabled>Select category</option>
+        <option value="NETWORK">Network Operations</option>
+        <option value="CLOUD">Cloud Infrastructure</option>
+        <option value="SERVER">Server Administration</option>
+        <option value="DATABASE">Database Administration</option>
+        <option value="DEVOPS">DevOps</option>
+        <option value="CYBER">Cybersecurity</option>
+        <option value="RISK">Risk & Compliance</option>
+        <option value="APP">Application Support</option>
+        <option value="AI">AI/ML Operations</option>
+        <option value="DATA">Data Engineering</option>
+        <option value="SRE">SRE</option>
+        <option value="INCIDENT">Incident Response</option>
+      </select>
 
-        textarea {
-            height: 120px;
-        }
+      <div style="height:12px;"></div>
 
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+      <label class="label">Priority</label>
+      <select class="select" name="priority" required>
+        <option value="" selected disabled>Select priority</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+      </select>
 
-        button:hover {
-            background: #0056b3;
-        }
+      <div style="height:12px;"></div>
 
-        .back {
-            text-align: center;
-            margin-top: 15px;
-        }
+      <label class="label">Issue Description</label>
+      <textarea class="textarea" name="description" required placeholder="Explain your issue clearly (what happened, when, impact, screenshots if any)..."></textarea>
 
-    </style>
-</head>
-<body>
+      <div style="height:14px;"></div>
 
-<div class="container">
-
-    <h2>Create New Ticket</h2>
-
-    <form method="POST">
-        {% csrf_token %}
-
-        <label>Category *</label>
-        <select name="category" required>
-            <option value="">Select Category</option>
-            <option value="NETWORK">Network Operations</option>
-            <option value="CLOUD">Cloud Infrastructure</option>
-            <option value="SERVER">Server Administration</option>
-            <option value="DATABASE">Database Administration</option>
-            <option value="DEVOPS">DevOps</option>
-            <option value="CYBER">Cybersecurity</option>
-            <option value="RISK">Risk & Compliance</option>
-            <option value="APP">Application Support</option>
-            <option value="AI">AI/ML Operations</option>
-            <option value="DATA">Data Engineering</option>
-            <option value="SRE">SRE</option>
-            <option value="INCIDENT">Incident Response</option>
-        </select>
-
-        <label>Priority *</label>
-        <select name="priority" required>
-            <option value="">Select Priority</option>
-            <option value="Critical">Critical</option>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-        </select>
-
-        <label>Description *</label>
-        <textarea name="description" placeholder="Describe your issue in detail..." required></textarea>
-
-        <button type="submit">Submit Ticket</button>
-
+      <button class="btn" type="submit">✅ Create Ticket</button>
+      <a class="btn secondary" href="{% url 'client_dashboard' %}">Cancel</a>
     </form>
+  </div>
 
-    <div class="back">
-        <a href="{% url 'client_dashboard' %}">Back to Dashboard</a>
+  <div class="card col-4">
+    <div style="font-weight:950;">🧠 Smart Tips (Client)</div>
+    <div class="small" style="margin-top:10px;">
+      • Select correct <b>Category</b> so ticket goes to correct department.<br/>
+      • Choose priority carefully — SLA resolution time depends on it.<br/>
+      • Detailed description helps engineer resolve faster.<br/>
+      • After resolved, you can <b>Reopen</b> if issue returns.
     </div>
 
-</div>
+    <hr class="sep">
 
-</body>
-</html>
+    <div class="small">
+      This project supports: <b>Risk scoring</b>, <b>Escalation</b>, <b>Breach detection</b>, and <b>Audit logs</b>.
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,686 @@
+/* =========================================================
+   GLOBAL THEME (Dark default) + AUTH (Login) + CLIENT LIGHT THEME
+   Cleaned to avoid multiple body{} overrides
+   ========================================================= */
+
+:root{
+  /* Dark theme (default) */
+  --bg:#0b1020;
+  --text:#e8ecff;
+  --muted:#a7b0d6;
+  --border:rgba(255,255,255,.08);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius:18px;
+  --primary:#6ea8fe;
+  --ok:#39d98a;
+  --warn:#ffd166;
+  --bad:#ff5c7a;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+/* ✅ DEFAULT: Dark dashboard theme (Engineer/Admin/Main Dashboard) */
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(110,168,254,.25), transparent 55%),
+    radial-gradient(900px 500px at 85% 20%, rgba(57,217,138,.18), transparent 60%),
+    radial-gradient(1000px 600px at 50% 90%, rgba(255,92,122,.12), transparent 55%),
+    var(--bg);
+  color:var(--text);
+}
+
+a{ color:inherit; }
+code{ background: rgba(255,255,255,.07); padding:2px 6px; border-radius:8px; border:1px solid var(--border); }
+
+.app{ height:100%; display:flex; }
+
+/* =========================================================
+   SIDEBAR (Default dark)
+   ========================================================= */
+.sidebar{
+  width:280px;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), transparent 40%),
+              rgba(15,23,48,.75);
+  border-right:1px solid var(--border);
+  padding:18px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  backdrop-filter: blur(10px);
+  transition: width .18s ease, transform .18s ease;
+}
+
+.brand{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(17,28,58,.55);
+  box-shadow: var(--shadow);
+}
+
+.brand-logo{
+  width:42px; height:42px;
+  border-radius:14px;
+  display:grid; place-items:center;
+  font-weight:900;
+  background: rgba(110,168,254,.18);
+  border:1px solid rgba(110,168,254,.35);
+}
+
+.brand-title{ font-weight:900; letter-spacing:.2px; }
+.brand-sub{ color:var(--muted); font-size:12px; margin-top:2px; }
+
+.nav{ display:flex; flex-direction:column; gap:8px; }
+
+.nav-item{
+  display:flex; align-items:center; gap:10px;
+  padding:12px 12px;
+  border-radius: 14px;
+  text-decoration:none;
+  border:1px solid transparent;
+  background: rgba(17,28,58,.30);
+}
+.nav-item:hover{
+  border-color: var(--border);
+  background: rgba(17,28,58,.55);
+}
+.nav-item.active{
+  border-color: rgba(110,168,254,.35);
+  background: rgba(110,168,254,.14);
+}
+
+.sidebar-footer{
+  margin-top:auto;
+  padding:12px;
+  border-radius: var(--radius);
+  border:1px solid var(--border);
+  background: rgba(17,28,58,.35);
+  color: var(--muted);
+  font-size:12px;
+}
+
+/* =========================================================
+   MAIN / TOPBAR
+   ========================================================= */
+.main{ flex:1; display:flex; flex-direction:column; min-width:0; }
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 18px 10px;
+  position: relative; /* profile dropdown anchor */
+}
+
+.top-left{ display:flex; align-items:center; gap:12px; }
+
+.icon-btn{
+  width:42px; height:42px;
+  border-radius: 14px;
+  border:1px solid var(--border);
+  background: rgba(17,28,58,.55);
+  color:var(--text);
+  cursor:pointer;
+}
+.icon-btn:hover{ background: rgba(17,28,58,.75); }
+
+.page-title{ font-weight:900; font-size:18px; }
+.page-subtitle{ color:var(--muted); font-size:12px; margin-top:3px; }
+
+.top-right{ display:flex; align-items:center; gap:10px; }
+
+.chip{
+  display:flex; align-items:center; gap:8px;
+  padding:10px 12px;
+  border-radius: 999px;
+  border:1px solid var(--border);
+  background: rgba(17,28,58,.35);
+  color: var(--muted);
+  font-size:12px;
+}
+
+.dot{
+  width:9px; height:9px; border-radius:50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 4px rgba(57,217,138,.15);
+}
+
+.avatar{
+  width:42px; height:42px;
+  border-radius: 16px;
+  display:grid; place-items:center;
+  font-weight:900;
+  border:1px solid var(--border);
+  background: rgba(110,168,254,.12);
+}
+
+/* Make avatar button look like avatar */
+.avatar-btn{
+  cursor:pointer;
+  border:none;
+  padding:0;
+}
+
+/* Content */
+.content{ padding: 10px 18px 18px; overflow:auto; }
+
+.card{
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(15,26,56,.55);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+.col-12{ grid-column: span 12; }
+.col-8{ grid-column: span 8; }
+.col-6{ grid-column: span 6; }
+.col-4{ grid-column: span 4; }
+.col-3{ grid-column: span 3; }
+
+/* Badges */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  border:1px solid var(--border);
+}
+.badge.ok{ background: rgba(57,217,138,.12); border-color: rgba(57,217,138,.28); }
+.badge.warn{ background: rgba(255,209,102,.12); border-color: rgba(255,209,102,.28); }
+.badge.bad{ background: rgba(255,92,122,.12); border-color: rgba(255,92,122,.28); }
+.badge.neutral{ background: rgba(110,168,254,.10); border-color: rgba(110,168,254,.25); }
+
+/* Tables */
+.table-wrap{ overflow:auto; border-radius:14px; border:1px solid var(--border); }
+.table{ width:100%; border-collapse: collapse; min-width: 860px; }
+.table th, .table td{
+  padding:12px 12px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+  font-size: 13px;
+}
+.table th{ color: var(--muted); font-weight:800; background: rgba(17,28,58,.35); position: sticky; top:0; }
+.table tr:hover td{ background: rgba(110,168,254,.06); }
+
+/* Forms */
+.input, .select, .textarea{
+  width:100%;
+  border-radius: 14px;
+  border:1px solid var(--border);
+  background: rgba(17,28,58,.35);
+  color: var(--text);
+  padding: 12px 12px;
+  outline:none;
+}
+.textarea{ min-height: 120px; resize: vertical; }
+.label{ color: var(--muted); font-size:12px; margin-bottom: 6px; display:block; }
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding: 11px 14px;
+  border-radius: 14px;
+  border:1px solid rgba(110,168,254,.35);
+  background: rgba(110,168,254,.16);
+  color: var(--text);
+  cursor:pointer;
+  text-decoration:none;
+  font-weight:800;
+}
+.btn:hover{ background: rgba(110,168,254,.24); }
+.btn.secondary{
+  border-color: var(--border);
+  background: rgba(17,28,58,.35);
+}
+.btn.secondary:hover{ background: rgba(17,28,58,.55); }
+
+.flex{ display:flex; gap:12px; flex-wrap:wrap; }
+.flex-between{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+
+.kpi .value{ font-size:26px; font-weight:950; }
+.small{ font-size:12px; color:var(--muted); line-height:1.55; }
+
+/* =========================================================
+   RESPONSIVE: Mobile sidebar slide
+   ========================================================= */
+@media (max-width: 980px){
+  .sidebar{ position:fixed; left:0; top:0; bottom:0; transform: translateX(0); z-index:50; }
+  .sidebar.hidden{ transform: translateX(-110%); }
+  .col-8,.col-6,.col-4,.col-3{ grid-column: span 12; }
+}
+
+/* Desktop collapse */
+@media (min-width: 981px){
+  .sidebar.collapsed{ width: 88px; }
+  .sidebar.collapsed .brand{ justify-content:center; }
+  .sidebar.collapsed .brand-title,
+  .sidebar.collapsed .brand-sub{ display:none; }
+  .sidebar.collapsed .nav-item{ justify-content:center; gap:0; }
+}
+
+/* =========================================================
+   PROFILE DROPDOWN (works for client theme too)
+   ========================================================= */
+.profile-menu{
+  position: absolute;
+  top: 68px;
+  right: 18px;
+  width: 280px;
+  background: #ffffff;
+  border: 1px solid rgba(15,23,42,.12);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(2,6,23,.18);
+  padding: 12px;
+  display: none;
+  z-index: 100;
+}
+.profile-menu.open{ display:block; }
+
+.profile-head{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding: 10px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid rgba(15,23,42,.08);
+}
+
+.profile-avatar{
+  width:44px;
+  height:44px;
+  border-radius: 16px;
+  display:grid;
+  place-items:center;
+  font-weight: 900;
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  color:#fff;
+}
+
+.profile-name{ font-weight: 950; color:#0b1220; }
+.profile-email{ font-size: 12px; color: rgba(15,23,42,.60); margin-top:2px; }
+
+.profile-actions{
+  margin-top: 10px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.profile-link{
+  text-decoration:none;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(15,23,42,.10);
+  color: rgba(15,23,42,.85);
+  font-weight: 800;
+}
+.profile-link:hover{
+  background: #eef2ff;
+  border-color: rgba(37,99,235,.22);
+}
+.profile-link.danger:hover{
+  background: rgba(255,92,122,.10);
+  border-color: rgba(255,92,122,.25);
+}
+
+/* =========================================================
+   AUTH (LOGIN PAGE ONLY)
+   Use <body class="auth-body">
+   ========================================================= */
+body.auth-body{
+  background:
+    linear-gradient(135deg, #4f46e5, #3b82f6, #06b6d4, #10b981);
+  background-size: 300% 300%;
+  animation: bgMove 15s ease infinite;
+  color:#0f172a;
+}
+
+@keyframes bgMove{
+  0%{ background-position:0% 50%; }
+  50%{ background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+
+/* Your auth layout classes still supported */
+.auth{ min-height:100vh; display:flex; justify-content:center; align-items:center; padding:40px; }
+
+/* =========================================================
+   ✅ CLIENT THEME (Matches your reference "SLA System" screenshot)
+   Body must have class: client-theme-light
+   ========================================================= */
+body.client-theme-light{
+  background: #eef2f7 !important;   /* light grey page bg */
+  color: #0b1220 !important;
+}
+
+/* main content should not be dark */
+body.client-theme-light .main{ background: transparent; }
+
+/* Sidebar: blue, like reference */
+body.client-theme-light .sidebar{
+  background: linear-gradient(180deg, #1e3a8a, #1e40af) !important;
+  border-right: 1px solid rgba(255,255,255,.20) !important;
+  box-shadow: 0 16px 40px rgba(2,6,23,.12) !important;
+}
+
+/* Brand block inside sidebar */
+body.client-theme-light .brand{
+  background: rgba(255,255,255,.10) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  box-shadow: none !important;
+}
+body.client-theme-light .brand-logo{
+  background: rgba(255,255,255,.18) !important;
+  border: 1px solid rgba(255,255,255,.25) !important;
+  color: #ffffff !important;
+}
+body.client-theme-light .brand-title{ color:#ffffff !important; }
+body.client-theme-light .brand-sub{ color: rgba(255,255,255,.80) !important; }
+
+/* Sidebar nav items */
+body.client-theme-light .nav-item{
+  background: rgba(255,255,255,.10) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  color: rgba(255,255,255,.92) !important;
+}
+body.client-theme-light .nav-item:hover{
+  background: rgba(255,255,255,.16) !important;
+  border-color: rgba(255,255,255,.25) !important;
+}
+body.client-theme-light .nav-item.active{
+  background: rgba(255,255,255,.22) !important;
+  border-color: rgba(255,255,255,.35) !important;
+}
+
+/* Sidebar footer: visible on blue */
+body.client-theme-light .sidebar-footer{
+  background: rgba(255,255,255,.12) !important;
+  border: 1px solid rgba(255,255,255,.20) !important;
+  color: rgba(255,255,255,.92) !important;
+}
+
+/* Topbar: clean light */
+body.client-theme-light .topbar{
+  background: transparent !important;
+}
+
+/* Hamburger button (light) */
+body.client-theme-light .icon-btn{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.14) !important;
+  color: #0b1220 !important;
+}
+body.client-theme-light .page-subtitle{
+  color: rgba(15,23,42,.60) !important;
+}
+
+/* Chip (support online) */
+body.client-theme-light .chip{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.12) !important;
+  color: rgba(15,23,42,.70) !important;
+}
+
+/* Avatar button: visible on light */
+body.client-theme-light .avatar{
+  background: #e0efff !important;
+  border: 1px solid rgba(37,99,235,.20) !important;
+  color: #0b1220 !important;
+}
+
+/* Cards: white with soft shadow */
+body.client-theme-light .card{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.10) !important;
+  box-shadow: 0 14px 36px rgba(2,6,23,.08) !important;
+  color: #0b1220 !important;
+}
+body.client-theme-light .small{
+  color: rgba(15,23,42,.60) !important;
+}
+
+/* Table: light */
+body.client-theme-light .table-wrap{
+  border: 1px solid rgba(15,23,42,.10) !important;
+  background: #ffffff !important;
+}
+body.client-theme-light .table th{
+  background: #f3f6fb !important;
+  color: rgba(15,23,42,.70) !important;
+}
+body.client-theme-light .table td{
+  color: rgba(15,23,42,.85) !important;
+}
+body.client-theme-light .table tr:hover td{
+  background: #f1f5f9 !important;
+}
+
+/* Inputs: white and readable */
+body.client-theme-light .input,
+body.client-theme-light .select,
+body.client-theme-light .textarea{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.14) !important;
+  color: #0b1220 !important;
+}
+body.client-theme-light .input::placeholder{
+  color: rgba(15,23,42,.45) !important;
+}
+
+/* Buttons: match your current premium blue */
+body.client-theme-light .btn{
+  border: none !important;
+  background: linear-gradient(90deg,#2563eb,#06b6d4) !important;
+  color: #ffffff !important;
+}
+body.client-theme-light .btn:hover{
+  filter: brightness(1.02);
+}
+body.client-theme-light .btn.secondary{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.14) !important;
+  color: #0b1220 !important;
+}
+
+/* =========================================================
+   ENGINEER LIGHT THEME (matches your reference screenshot)
+   SAFE: only affects body.engineer-theme-light
+   ========================================================= */
+
+body.engineer-theme-light{
+  background: #f3f5f9 !important;
+  color: #0b1220 !important;
+}
+
+/* Sidebar (blue gradient like reference) */
+body.engineer-theme-light .sidebar{
+  background: linear-gradient(180deg, #1f3a5b, #162a43) !important;
+  border-right: 1px solid rgba(15,23,42,.10) !important;
+  box-shadow: 0 10px 28px rgba(2,6,23,.10) !important;
+  color: #ffffff !important;
+}
+
+body.engineer-theme-light .brand{
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  box-shadow: 0 10px 24px rgba(2,6,23,.10) !important;
+}
+
+body.engineer-theme-light .brand-title,
+body.engineer-theme-light .brand-sub{
+  color: rgba(255,255,255,.92) !important;
+}
+
+body.engineer-theme-light .nav-item{
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: rgba(255,255,255,.92) !important;
+}
+body.engineer-theme-light .nav-item:hover{
+  background: rgba(255,255,255,.14) !important;
+}
+body.engineer-theme-light .nav-item.active{
+  background: rgba(255,255,255,.18) !important;
+  border-color: rgba(255,255,255,.22) !important;
+}
+
+/* Main area */
+body.engineer-theme-light .topbar{
+  background: transparent !important;
+}
+body.engineer-theme-light .page-title{
+  color: #0b1220 !important;
+}
+body.engineer-theme-light .page-subtitle{
+  color: rgba(15,23,42,.60) !important;
+}
+
+body.engineer-theme-light .icon-btn{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.12) !important;
+  color: #0b1220 !important;
+}
+
+body.engineer-theme-light .chip{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.10) !important;
+  color: rgba(15,23,42,.65) !important;
+}
+
+/* Cards (white cards like reference) */
+body.engineer-theme-light .card{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.10) !important;
+  box-shadow: 0 16px 40px rgba(2,6,23,.08) !important;
+  color: #0b1220 !important;
+}
+body.engineer-theme-light .small{
+  color: rgba(15,23,42,.60) !important;
+}
+
+/* Table */
+body.engineer-theme-light .table-wrap{
+  border: 1px solid rgba(15,23,42,.10) !important;
+}
+body.engineer-theme-light .table th{
+  background: #f8fafc !important;
+  color: rgba(15,23,42,.70) !important;
+}
+body.engineer-theme-light .table td{
+  color: rgba(15,23,42,.85) !important;
+}
+body.engineer-theme-light .table tr:hover td{
+  background: #f1f5f9 !important;
+}
+
+/* Inputs */
+body.engineer-theme-light .input,
+body.engineer-theme-light .select,
+body.engineer-theme-light .textarea{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.14) !important;
+  color: #0b1220 !important;
+}
+body.engineer-theme-light .input::placeholder{
+  color: rgba(15,23,42,.45) !important;
+}
+
+/* Profile dropdown stays readable in light theme */
+body.engineer-theme-light .profile-menu{
+  background: #ffffff !important;
+  color: #0b1220 !important;
+}
+
+
+/* =========================================================
+   ENGINEER LIGHT THEME (same reference style as client)
+   ========================================================= */
+
+/* Make engineer base.html use the same light theme rules */
+body.app-theme-light{
+  background: #f3f5f9 !important;
+  color: #0b1220 !important;
+}
+
+body.app-theme-light .main{ background: transparent; }
+
+body.app-theme-light .sidebar{
+  background: #ffffff !important;
+  border-right: 1px solid rgba(15,23,42,.10) !important;
+  box-shadow: 0 10px 28px rgba(2,6,23,.06) !important;
+}
+
+body.app-theme-light .brand{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.10) !important;
+  box-shadow: 0 10px 24px rgba(2,6,23,.06) !important;
+}
+
+body.app-theme-light .brand-sub{ color: rgba(15,23,42,.60) !important; }
+
+body.app-theme-light .nav-item{
+  background: #f8fafc !important;
+  border: 1px solid rgba(15,23,42,.08) !important;
+  color: rgba(15,23,42,.85) !important;
+}
+body.app-theme-light .nav-item:hover{
+  background: #eef2ff !important;
+  border-color: rgba(37,99,235,.20) !important;
+}
+
+body.app-theme-light .icon-btn{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.12) !important;
+  color: #0b1220 !important;
+}
+body.app-theme-light .page-subtitle{ color: rgba(15,23,42,.60) !important; }
+
+body.app-theme-light .chip{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.10) !important;
+  color: rgba(15,23,42,.65) !important;
+}
+
+/* Cards white + clean */
+body.app-theme-light .card{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.10) !important;
+  box-shadow: 0 16px 40px rgba(2,6,23,.08) !important;
+  color: #0b1220 !important;
+}
+body.app-theme-light .small{ color: rgba(15,23,42,.60) !important; }
+
+/* Table light */
+body.app-theme-light .table-wrap{ border: 1px solid rgba(15,23,42,.10) !important; }
+body.app-theme-light .table th{
+  background: #f8fafc !important;
+  color: rgba(15,23,42,.70) !important;
+}
+body.app-theme-light .table td{ color: rgba(15,23,42,.85) !important; }
+body.app-theme-light .table tr:hover td{ background: #f1f5f9 !important; }
+
+/* Inputs light */
+body.app-theme-light .input,
+body.app-theme-light .select,
+body.app-theme-light .textarea{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,.14) !important;
+  color: #0b1220 !important;
+}
+body.app-theme-light .input::placeholder{
+  color: rgba(15,23,42,.45) !important;
+}

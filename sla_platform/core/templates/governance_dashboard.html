@@ -1,16 +1,42 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Governance Dashboard</title>
-</head>
-<body>
+{% extends "base_admin.html" %}
+{% block title %}Admin | Governance{% endblock %}
+{% block page_title %}Governance Dashboard{% endblock %}
+{% block page_subtitle %}SLA health, breaches, escalations and resolution time{% endblock %}
 
-<h1>Governance Dashboard</h1>
+{% block content %}
+<div class="grid">
+  <div class="card col-3">
+    <div class="small">SLA Health</div>
+    <div class="kpi"><div class="value">{{ sla_health }}%</div></div>
+    <span class="badge ok">Healthy</span>
+  </div>
 
-<h3>SLA Health Score: {{ sla_health }}%</h3>
-<h3>Breach Rate: {{ breach_rate }}%</h3>
-<h3>Total Escalations (Avg): {{ total_escalations }}</h3>
-<h3>Average Resolution Time (hrs): {{ avg_resolution_time }}</h3>
+  <div class="card col-3">
+    <div class="small">Breach Rate</div>
+    <div class="kpi"><div class="value">{{ breach_rate }}%</div></div>
+    <span class="badge warn">Monitor</span>
+  </div>
 
-</body>
-</html>
+  <div class="card col-3">
+    <div class="small">Avg Escalations</div>
+    <div class="kpi"><div class="value">{{ total_escalations }}</div></div>
+    <span class="badge neutral">Load</span>
+  </div>
+
+  <div class="card col-3">
+    <div class="small">Avg Resolution Time</div>
+    <div class="kpi"><div class="value">{{ avg_resolution_time }}h</div></div>
+    <span class="badge neutral">Speed</span>
+  </div>
+
+  <div class="card col-12">
+    <div style="font-weight:950;">Admin Tools</div>
+    <div class="small" style="margin-top:8px;">
+      Open APIs:
+      <a href="/api/governance/" target="_blank">/api/governance/</a> •
+      <a href="/api/system-health/" target="_blank">/api/system-health/</a> •
+      <a href="/api/backend-status/" target="_blank">/api/backend-status/</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

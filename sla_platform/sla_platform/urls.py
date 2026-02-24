@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth import views as auth_views
+
 from core.views import engineer_register
 from core.views import client_dashboard
 from core.views import create_ticket
@@ -32,10 +34,17 @@ urlpatterns = [
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
     path('api/governance-metrics/', governance_metrics, name='governance_metrics'),
-    path('api/engineer-performance/',engineer_performance, name='engineer_performance'),
+    path('api/engineer-performance/', engineer_performance, name='engineer_performance'),
     path('api/system-health/', system_health, name='system_health'),
     path('api/backend-status/', backend_status, name='backend_status'),
     path("ticket/reopen/<int:ticket_id>/", reopen_ticket, name="reopen_ticket"),
 
-]
+    # ✅ Change Password (Profile menu)
+    path("password-change/", auth_views.PasswordChangeView.as_view(
+        template_name="registration/password_change_form.html"
+    ), name="password_change"),
 
+    path("password-change/done/", auth_views.PasswordChangeDoneView.as_view(
+        template_name="registration/password_change_done.html"
+    ), name="password_change_done"),
+]

@@ -1,16 +1,54 @@
-<h2>Update Ticket #{{ ticket.id }}</h2>
+{% extends "base_engineer.html" %}
+{% block title %}Engineer | Update Ticket{% endblock %}
+{% block page_title %}Update Ticket Status{% endblock %}
+{% block page_subtitle %}Updates create Audit logs automatically{% endblock %}
 
-<p><b>Description:</b> {{ ticket.description }}</p>
-<p><b>Priority:</b> {{ ticket.priority }}</p>
-<p><b>Status:</b> {{ ticket.status }}</p>
+{% block content %}
+<div class="grid">
+  <div class="card col-8">
+    <div class="flex-between">
+      <div>
+        <div style="font-weight:950;">Ticket #{{ ticket.id }}</div>
+        <div class="small">Priority: <b>{{ ticket.priority }}</b> • Category: <b>{{ ticket.category }}</b></div>
+      </div>
+      <a class="btn secondary" href="{% url 'dashboard' %}">Back</a>
+    </div>
 
-<form method="POST">
-    {% csrf_token %}
-    <select name="status">
-        <option value="IN_PROGRESS">Mark as In Progress</option>
-        <option value="RESOLVED">Mark as Resolved</option>
-    </select>
-    <button type="submit">Update</button>
-</form>
+    <div style="height:14px;"></div>
 
-<a href="{% url 'dashboard' %}">Back</a>
+    <div class="card" style="background: rgba(17,28,58,.25);">
+      <div class="small"><b>Description</b></div>
+      <div style="margin-top:8px; line-height:1.6;">{{ ticket.description }}</div>
+    </div>
+
+    <div style="height:14px;"></div>
+
+    <form method="POST" action="{% url 'update_ticket_status' ticket.id %}">
+      {% csrf_token %}
+      <label class="label">New Status</label>
+      <select class="select" name="status" required>
+        <option value="NEW" {% if ticket.status == "NEW" %}selected{% endif %}>New</option>
+        <option value="IN_PROGRESS" {% if ticket.status == "IN_PROGRESS" %}selected{% endif %}>In Progress</option>
+        <option value="RESOLVED" {% if ticket.status == "RESOLVED" %}selected{% endif %}>Resolved</option>
+        <option value="REOPENED" {% if ticket.status == "REOPENED" %}selected{% endif %}>Reopened</option>
+        <option value="BREACHED" {% if ticket.status == "BREACHED" %}selected{% endif %}>Breached</option>
+      </select>
+
+      <div style="height:14px;"></div>
+
+      <button class="btn" type="submit">💾 Save Status</button>
+      <a class="btn secondary" href="{% url 'dashboard' %}">Cancel</a>
+    </form>
+  </div>
+
+  <div class="card col-4">
+    <div style="font-weight:950;">Engineer Checklist</div>
+    <div class="small" style="margin-top:10px;">
+      • Move to <b>IN_PROGRESS</b> when you start working.<br/>
+      • Mark <b>RESOLVED</b> only after confirmation.<br/>
+      • If SLA is close, escalation may re-assign to Team Lead automatically.<br/>
+      • Audit logs are created for each status change.
+    </div>
+  </div>
+</div>
+{% endblock %}

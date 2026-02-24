@@ -1,56 +1,175 @@
-<h1>SLA Enterprise Dashboard</h1>
-<h3>Notifications</h3>
-{% for n in notifications %}
-    <div style="background:#222;color:white;padding:8px;margin:5px;">
-        {{ n.message }}
+{% extends "base.html" %}
+{% block title %}Dashboard | SLA Governance{% endblock %}
+{% block page_title %}Main Dashboard{% endblock %}
+{% block page_subtitle %}Tickets, SLA timer, breach risk & actions{% endblock %}
+
+{% block content %}
+
+<div class="flex-between">
+  <div class="flex">
+    {% if is_client %}
+      <a class="btn" href="{% url 'create_ticket' %}">➕ Create Ticket</a>
+      <a class="btn secondary" href="{% url 'client_dashboard' %}">🎫 My Tickets</a>
+    {% endif %}
+
+    {% if is_engineer %}
+      <span class="badge neutral">Engineer Mode</span>
+    {% endif %}
+
+    <a class="btn secondary" href="{% url 'governance_dashboard' %}">🛡️ Governance</a>
+  </div>
+
+  <input class="input" style="max-width:320px;" placeholder="Search tickets..." data-table-search="#dashTable">
+</div>
+
+<div style="height:14px;"></div>
+
+{% if notifications and is_engineer %}
+  <div class="card">
+    <div class="flex-between">
+      <div>
+        <div style="font-weight:900;">🔔 New Notifications</div>
+        <div style="color:var(--muted); font-size:12px;">Unread updates for you</div>
+      </div>
+      <span class="badge warn">{{ notifications|length }} unread</span>
     </div>
-{% empty %}
-    <p>No new notifications</p>
-{% endfor %}
-<p>Logged in as: {{ request.user.username }}</p>
+    <div style="height:10px;"></div>
 
-<table border="1" cellpadding="10">
-<tr>
-    <th>ID</th>
-    <th>Client</th>
-    <th>Category</th>
-    <th>Priority</th>
-    <th>Status</th>
-    <th>SLA Status</th>
-    <th>Remaining (hrs)</th>
-    <th>Usage %</th>
-    <th>Assigned</th>
-    <th>Action</th>
-</tr>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Message</th>
+            <th>Ticket</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for n in notifications %}
+          <tr>
+            <td>{{ n.message }}</td>
+            <td>{% if n.ticket %}#{{ n.ticket.id }}{% else %}-{% endif %}</td>
+            <td>{{ n.created_at }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-{% for item in tickets %}
-<tr>
-    <td>{{ item.ticket.id }}</td>
-    <td>{{ item.ticket.client.name }}</td>
-    <td>{{ item.ticket.category }}</td>
-    <td>{{ item.ticket.priority }}</td>
-    <td>{{ item.ticket.status }}</td>
-    <td>{{ item.sla_status }}</td>
-    <td>{{ item.remaining_hours }}</td>
-    <td>{{ item.usage_percent }}%</td>
-    <td>
-        {% if item.ticket.assigned_to %}
-            {{ item.ticket.assigned_to.username }}
-        {% else %}
-            Not Assigned
-        {% endif %}
-    </td>
-    <td>
-        {% if is_engineer %}
-            <a href="{% url 'update_ticket_status' item.ticket.id %}">
-                Update
-            </a>
-        {% else %}
-            -
-        {% endif %}
-    </td>
-</tr>
-{% endfor %}
-</table>
+  <div style="height:14px;"></div>
+{% endif %}
 
-<h3>Total Tickets: {{ tickets|length }}</h3>
+<div class="grid">
+  <div class="card col-3">
+    <div class="kpi">
+      <div class="label">Total Tickets</div>
+      <div class="value">{{ total_tickets }}</div>
+    </div>
+  </div>
+
+  <div class="card col-3">
+    <div class="kpi">
+      <div class="label">Breached</div>
+      <div class="value">{{ breached_count }}</div>
+      <div class="small">Calculated from SLA breach flag</div>
+    </div>
+  </div>
+
+  <div class="card col-3">
+    <div class="kpi">
+      <div class="label">Resolved Tickets</div>
+      <div class="value">{{ resolved_count }}</div>
+      <div class="small">Closed successfully (RESOLVED)</div>
+    </div>
+  </div>
+
+  <div class="card col-3">
+    <div class="kpi">
+      <div class="label">Active Tickets</div>
+      <div class="value">{{ active_count }}</div>
+      <div class="small">NEW / IN_PROGRESS / REOPENED</div>
+    </div>
+  </div>
+</div>
+
+<div style="height:14px;"></div>
+
+<div class="card">
+  <div class="flex-between">
+    <div>
+      <div style="font-weight:900;">📌 Ticket Overview</div>
+      <div style="color:var(--muted); font-size:12px;">SLA status, remaining time and actions</div>
+    </div>
+    <span class="badge neutral">Table View</span>
+  </div>
+
+  <div style="height:10px;"></div>
+
+  <div class="table-wrap">
+    <table class="table" id="dashTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Client</th>
+          <th>Department</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>SLA</th>
+          <th>Usage %</th>
+          <th>Remaining (hrs)</th>
+          <th>Risk</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in tickets %}
+        <tr>
+          <td>#{{ row.ticket.id }}</td>
+          <td>{{ row.ticket.client.name }}</td>
+          <td>{% if row.ticket.department %}{{ row.ticket.department.name }}{% else %}-{% endif %}</td>
+          <td>{{ row.ticket.priority }}</td>
+          <td>
+            {% if row.ticket.status == "RESOLVED" %}
+              <span class="badge ok">RESOLVED</span>
+            {% elif row.ticket.status == "BREACHED" %}
+              <span class="badge bad">BREACHED</span>
+            {% elif row.ticket.status == "IN_PROGRESS" %}
+              <span class="badge warn">IN_PROGRESS</span>
+            {% else %}
+              <span class="badge neutral">{{ row.ticket.status }}</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if row.sla_status == "ON_TRACK" %}
+              <span class="badge ok">ON_TRACK</span>
+            {% elif row.sla_status == "WARNING" %}
+              <span class="badge warn">WARNING</span>
+            {% elif row.sla_status == "CRITICAL_RISK" %}
+              <span class="badge bad">CRITICAL</span>
+            {% elif row.sla_status == "NO_SLA_DEFINED" %}
+              <span class="badge neutral">NO SLA</span>
+            {% else %}
+              <span class="badge neutral">{{ row.sla_status }}</span>
+            {% endif %}
+          </td>
+          <td>{% if row.usage_percent != None %}{{ row.usage_percent }}%{% else %}-{% endif %}</td>
+          <td>{% if row.remaining_hours != None %}{{ row.remaining_hours }}{% else %}-{% endif %}</td>
+          <td>{% if row.ticket.risk_level %}<span class="badge neutral">{{ row.ticket.risk_level }}</span>{% else %}-{% endif %}</td>
+          <td>
+            {% if is_engineer %}
+              <a class="btn secondary" href="{% url 'update_ticket_status' row.ticket.id %}">Update</a>
+            {% else %}
+              <span class="small">No actions</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="10" class="small">No tickets found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

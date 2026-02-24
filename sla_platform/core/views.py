@@ -2,46 +2,43 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
-from django.contrib.auth import authenticate, login
-from .models import Ticket, Client
-from .sla_engine import calculate_sla_status
 from django.contrib.auth import authenticate, login, logout
-from django.db.models import Count, Q
-from core.models import Department, EngineerProfile, Team, Ticket
-from .models import TicketAuditLog
-from .models import SLAContract
-from .models import TicketAudit
+from django.contrib import messages
 from django.core.mail import send_mail
 from django.utils import timezone
 
+from django.db.models import Count, Q
+
 from .models import (
     Ticket,
+    Client,
     Department,
     EngineerProfile,
+    Team,
     SLAContract,
-    Notification
+    Notification,
+    TicketAuditLog,
+    TicketAudit
 )
-from .sla_engine import calculate_sla_status
+
+from .sla_engine import calculate_sla_status, calculate_time_metrics
 from .governance_engine import (
     calculate_sla_health,
     calculate_breach_rate,
     calculate_total_escalations,
     calculate_average_resolution_time
-
 )
-
 
 # ---------------- ROLE CHECK FUNCTIONS ---------------- #
 
 def is_admin(user):
-    return user.groups.filter(name='ADMIN').exists()
+    return user.groups.filter(name='ADMIN').exists() or user.is_superuser
 
 def is_engineer(user):
     return user.groups.filter(name='ENGINEERS').exists()
 
 def is_client(user):
     return hasattr(user, 'client')
-
 
 
 # ---------------- CLIENT REGISTER ---------------- #
@@ -54,6 +51,9 @@ def client_register(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
+        if User.objects.filter(username=username).exists():
+            return HttpResponse("Username already exists.")
+
         print("Creating user...")
 
         user = User.objects.create_user(
@@ -61,6 +61,9 @@ def client_register(request):
             email=email,
             password=password
         )
+
+        group, created = Group.objects.get_or_create(name='CLIENTS')
+        user.groups.add(group)
 
         print("Creating client profile...")
 
@@ -94,7 +97,6 @@ def engineer_register(request):
             password=password
         )
 
-        # 🔥 THIS IS IMPORTANT
         user.is_staff = True
         user.save()
 
@@ -106,37 +108,30 @@ def engineer_register(request):
     return render(request, "engineer_register.html")
 
 
-
 # ---------------- MAIN DASHBOARD ---------------- #
-
-from .models import Ticket, SLAContract, EngineerProfile
-from .sla_engine import calculate_sla_status, calculate_time_metrics
 
 @login_required
 def dashboard(request):
-
     user = request.user
 
-    # ---------------------------------
-    # ROLE BASED TICKET FILTER
-    # ---------------------------------
-    if user.groups.filter(name="ENGINEERS").exists():
-        tickets = Ticket.objects.filter(assigned_to=user)
-
-    elif user.groups.filter(name="CLIENTS").exists():
-        tickets = Ticket.objects.filter(client=user.client)
-
+    # ✅ Choose tickets by role
+    if is_engineer(user):
+        base_qs = Ticket.objects.filter(assigned_to=user)
+    elif is_client(user):
+        base_qs = Ticket.objects.filter(client=user.client)
     else:
-        tickets = Ticket.objects.all()
+        base_qs = Ticket.objects.all()
 
+    # ✅ KPI counts computed in BACKEND (no JS dependency)
+    total_tickets = base_qs.count()
+    breached_count = base_qs.filter(breached=True).count()
+    resolved_count = base_qs.filter(status="RESOLVED").count()
+    active_count = base_qs.filter(status__in=["NEW", "IN_PROGRESS", "REOPENED"]).count()
+
+    # ✅ Build dashboard rows (your existing structure)
     dashboard_data = []
-
-    for ticket in tickets:
-
-        # SLA Metrics
+    for ticket in base_qs:
         metrics = calculate_time_metrics(ticket)
-
-        # SLA Status
         sla_status = calculate_sla_status(ticket)
 
         dashboard_data.append({
@@ -146,9 +141,6 @@ def dashboard(request):
             "usage_percent": metrics["usage_percent"] if metrics else None,
         })
 
-    # ---------------------------------
-    # Notifications for engineers
-    # ---------------------------------
     notifications = Notification.objects.filter(
         user=user,
         is_read=False
@@ -157,8 +149,14 @@ def dashboard(request):
     return render(request, "dashboard.html", {
         "tickets": dashboard_data,
         "notifications": notifications,
-        "is_engineer": user.groups.filter(name="ENGINEERS").exists(),
-        "is_client": user.groups.filter(name="CLIENTS").exists(),
+        "is_engineer": is_engineer(user),
+        "is_client": is_client(user),
+
+        # ✅ KPIs for template
+        "total_tickets": total_tickets,
+        "breached_count": breached_count,
+        "resolved_count": resolved_count,
+        "active_count": active_count,
     })
 
 
@@ -166,7 +164,6 @@ def dashboard(request):
 
 @login_required
 def client_dashboard(request):
-
     if not is_client(request.user):
         return redirect('dashboard')
 
@@ -177,8 +174,19 @@ def client_dashboard(request):
 
     tickets = Ticket.objects.filter(client=client)
 
+    total_tickets = tickets.count()
+    breached_count = tickets.filter(breached=True).count()
+
+    open_tickets = tickets.filter(status__in=["NEW", "IN_PROGRESS", "REOPENED"]).count()
+
+    sla_met = tickets.filter(status="RESOLVED", breached=False).count()
+
     return render(request, "client_dashboard.html", {
-        "tickets": tickets
+        "tickets": tickets,
+        "total_tickets": total_tickets,
+        "breached_count": breached_count,
+        "open_tickets": open_tickets,
+        "sla_met": sla_met,
     })
 
 
@@ -246,9 +254,6 @@ def risk_data_api(request):
     return JsonResponse({"tickets": data})
 
 
-
-
-
 # 🔥 Category → Department mapping
 CATEGORY_DEPT_MAP = {
     'NETWORK': 'Network Operations',
@@ -264,7 +269,6 @@ CATEGORY_DEPT_MAP = {
     'SRE': 'SRE (Site Reliability Engineering)',
     'INCIDENT': 'Incident Response Team',
 }
-
 
 
 @login_required
@@ -284,9 +288,6 @@ def create_ticket(request):
         priority = request.POST.get("priority")
         category = request.POST.get("category")
 
-        # -----------------------------
-        # STEP 1: Resolve Department
-        # -----------------------------
         department_name = CATEGORY_DEPT_MAP.get(category)
 
         if not department_name:
@@ -297,20 +298,14 @@ def create_ticket(request):
         except Department.DoesNotExist:
             return HttpResponse("Department not configured in admin.")
 
-        # -----------------------------
-        # STEP 2: SLA (Optional)
-        # -----------------------------
         try:
             sla = SLAContract.objects.get(
                 client=client,
                 priority=priority
             )
         except SLAContract.DoesNotExist:
-            sla = None   # Allow ticket creation even if SLA missing
+            sla = None
 
-        # -----------------------------
-        # STEP 3: Load Balanced Assignment
-        # -----------------------------
         engineers = EngineerProfile.objects.filter(
             team__department=department
         ).select_related("user")
@@ -338,9 +333,6 @@ def create_ticket(request):
         if least_loaded_engineer is None:
             return HttpResponse("All engineers currently overloaded.")
 
-        # -----------------------------
-        # STEP 4: Create Ticket (ONLY ONCE)
-        # -----------------------------
         ticket = Ticket.objects.create(
             client=client,
             description=description,
@@ -351,18 +343,12 @@ def create_ticket(request):
             status="NEW"
         )
 
-        # -----------------------------
-        # STEP 5: Create Notification
-        # -----------------------------
         Notification.objects.create(
             user=least_loaded_engineer,
             ticket=ticket,
             message=f"You have been assigned Ticket #{ticket.id}"
         )
 
-        # -----------------------------
-        # STEP 6: Email Notification (Console)
-        # -----------------------------
         if least_loaded_engineer.email:
             send_mail(
                 subject="New SLA Ticket Assigned",
@@ -375,11 +361,12 @@ def create_ticket(request):
         return redirect("client_dashboard")
 
     return render(request, "create_ticket.html")
-    
 
 
+# ---------------- AUTH ---------------- #
 
 def user_login(request):
+    next_url = request.GET.get("next") or request.POST.get("next")
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -390,20 +377,24 @@ def user_login(request):
         if user is not None:
             login(request, user)
 
-            next_url = request.GET.get("next")
             if next_url:
                 return redirect(next_url)
 
             return redirect("dashboard")
 
         else:
-            return HttpResponse("Invalid credentials")
+            messages.error(request, "Invalid username or password. Please try again.")
+            return render(request, "login.html", {"next": next_url})
 
-    return render(request, "login.html")
+    return render(request, "login.html", {"next": next_url})
+
 
 def user_logout(request):
     logout(request)
     return redirect("login")
+
+
+# ---------------- ENGINEER UPDATE TICKET ---------------- #
 
 @login_required
 def update_ticket_status(request, ticket_id):
@@ -425,7 +416,7 @@ def update_ticket_status(request, ticket_id):
         TicketAuditLog.objects.create(
             ticket=ticket,
             changed_by=request.user,
-        old_status=old_status,
+            old_status=old_status,
             new_status=ticket.status
         )
 
@@ -439,6 +430,8 @@ def update_ticket_status(request, ticket_id):
 
     return render(request, "update_ticket.html", {"ticket": ticket})
 
+
+# ---------------- GOVERNANCE METRICS API ---------------- #
 
 @login_required
 def governance_metrics(request):
@@ -458,11 +451,11 @@ def governance_metrics(request):
 
     return JsonResponse(data)
 
+
 @login_required
 def engineer_performance(request):
 
     engineers = EngineerProfile.objects.all()
-
     performance_data = []
 
     for engineer in engineers:
@@ -487,6 +480,7 @@ def engineer_performance(request):
 
     return JsonResponse(performance_data, safe=False)
 
+
 @login_required
 def system_health(request):
 
@@ -507,6 +501,7 @@ def system_health(request):
         "high_risk_tickets": risk_high
     })
 
+
 @login_required
 def backend_status(request):
 
@@ -521,17 +516,20 @@ def backend_status(request):
         "engineer_performance": True
     })
 
+
+# ---------------- CLIENT REOPEN TICKET ---------------- #
+
 @login_required
 def reopen_ticket(request, ticket_id):
 
-    ticket = get_object_or_404(
-    Ticket,
-    id=ticket_id,
-    client=request.user.client
-    )
-
     if not hasattr(request.user, "client"):
         return HttpResponse("Only client can reopen ticket.")
+
+    ticket = get_object_or_404(
+        Ticket,
+        id=ticket_id,
+        client=request.user.client
+    )
 
     if ticket.status != "RESOLVED":
         return HttpResponse("Only resolved tickets can be reopened.")
@@ -547,6 +545,9 @@ def reopen_ticket(request, ticket_id):
     )
 
     return redirect("client_dashboard")
+
+
+# ---------------- CLIENT DELETE TICKET (SOFT DELETE) ---------------- #
 
 @login_required
 def delete_ticket(request, ticket_id):

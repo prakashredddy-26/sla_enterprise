@@ -1,16 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Client Register</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Client Register | SLA Governance</title>
+  <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
 </head>
 <body>
-    <h2>Client Register</h2>
-<form method="POST">
-    {% csrf_token %}
-    Username: <input type="text" name="username"><br>
-    Email: <input type="email" name="email"><br>
-    Password: <input type="password" name="password"><br>
-    <button type="submit">Register</button>
-</form>
+  <div class="auth">
+    <div class="auth-card">
+      <div class="auth-left">
+        <h1 class="auth-title">Client Registration</h1>
+        <p class="auth-sub">Create a client account to raise and manage SLA tickets.</p>
+
+        <form method="POST" action="{% url 'client_register' %}">
+          {% csrf_token %}
+
+          <label class="label">Username</label>
+          <input class="input" type="text" name="username" required placeholder="Your username">
+
+          <div style="height:12px;"></div>
+
+          <label class="label">Email</label>
+          <input class="input" type="email" name="email" required placeholder="you@example.com">
+
+          <div style="height:12px;"></div>
+
+          <label class="label">Password</label>
+          <input class="input" type="password" name="password" required placeholder="Create password">
+
+          <div style="height:14px;"></div>
+
+          <button class="btn" type="submit">✅ Register</button>
+          <a class="btn secondary" href="{% url 'login' %}">Back to Login</a>
+        </form>
+      </div>
+
+      <div class="auth-right">
+        <h3 style="margin:0 0 10px;">Client Features</h3>
+        <ul class="small" style="margin:0; padding-left:18px;">
+          <li>Create ticket (priority + category)</li>
+          <li>See assigned engineer and ticket status</li>
+          <li>Reopen resolved tickets</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

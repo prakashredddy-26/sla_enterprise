@@ -1,18 +1,351 @@
-<!DOCTYPE html>
-<html>
+{% load static %}
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Login</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>SLA Enterprise | Login</title>
+
+  <!-- Keep your existing main stylesheet -->
+  <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+  <!-- Add landing page specific css (NEW) -->
+  <link rel="stylesheet" href="{% static 'core/css/login_landing.css' %}">
 </head>
-<body>
 
-<h2>Login</h2>
+<body class="auth-page">
+  <!-- Top Navbar -->
+  <header class="landing-nav">
+    <div class="landing-nav__inner">
+      <a class="brand-mini" href="#top">
+        <span class="brand-mini__logo">SLA</span>
+        <span class="brand-mini__text">
+          <b>Enterprise</b>
+          <small>AI Powered SLA Governance</small>
+        </span>
+      </a>
 
-<form method="POST">
-    {% csrf_token %}
-    Username: <input type="text" name="username"><br><br>
-    Password: <input type="password" name="password"><br><br>
-    <button type="submit">Login</button>
-</form>
+      <nav class="landing-links">
+        <a href="#features">Features</a>
+        <a href="#services">Services</a>
+        <a href="#approach">Approach</a>
+        <a href="#benefits">Benefits</a>
+        <a href="#contact">Contact</a>
+      </nav>
 
+      <div class="landing-actions">
+        <a class="ghost-btn" href="#features">Explore</a>
+        <a class="solid-btn" href="#login">Login</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO + LOGIN -->
+  <main id="top" class="landing-hero">
+    <section class="hero-wrap" id="login">
+      <div class="hero-left">
+        <div class="hero-badge">⚡ AI Powered SLA Governance</div>
+
+        <h1 class="hero-title">
+          Keep <span class="grad">SLA under control</span><br/>
+          with risk & escalation automation.
+        </h1>
+
+        <p class="hero-sub">
+          SLA Enterprise helps clients create tickets, track SLA timers, detect breach risk,
+          and enables engineers to resolve incidents with audit trails and escalations — all in one platform.
+        </p>
+
+        <div class="hero-pills">
+          <span class="pill">⏱ SLA Timer</span>
+          <span class="pill">🛡 Governance</span>
+          <span class="pill">📈 Risk Scoring</span>
+          <span class="pill">🔔 Notifications</span>
+        </div>
+
+        <div class="hero-media">
+          <!-- use your image -->
+          <img src="{% static 'core/img/sla_agreement.jpg' %}" alt="SLA agreement" />
+          <div class="hero-media__overlay">
+            <div class="overlay-title">SLA Enterprise</div>
+            <div class="overlay-sub">Smart ticket routing • breach detection • audit logs</div>
+          </div>
+        </div>
+
+        <div class="hero-cta">
+          <a class="solid-btn" href="#features">See how it works</a>
+          <a class="ghost-btn" href="#contact">Talk to us</a>
+        </div>
+      </div>
+
+      <!-- LOGIN CARD -->
+      <div class="hero-right">
+        <div class="login-card">
+          <div class="login-head">
+            <h2>Welcome back</h2>
+            <p>Login to access your portal. Select your role.</p>
+          </div>
+
+          <!-- IMPORTANT: keep POST + csrf_token -->
+          <form method="POST" action="" class="login-form">
+            {% csrf_token %}
+
+            <!-- ROLE TABS -->
+            <input type="hidden" name="role" id="roleInput" value="client"/>
+
+            <div class="role-tabs" role="tablist" aria-label="Select role">
+              <button type="button" class="role-tab active" data-role="client">Client</button>
+              <button type="button" class="role-tab" data-role="engineer">Engineer</button>
+              <button type="button" class="role-tab" data-role="admin">Admin</button>
+            </div>
+
+            <div class="role-hint" id="roleHint">
+              Client can create tickets and track SLA status.
+            </div>
+
+            <!-- FIELDS -->
+            <label class="field">
+              <span>Username</span>
+              <input type="text" name="username" placeholder="Enter username" required>
+            </label>
+
+            <label class="field">
+              <span>Password</span>
+              <input type="password" name="password" placeholder="Enter password" required>
+            </label>
+
+            {% if messages %}
+              <div class="msg-wrap">
+                {% for message in messages %}
+                  <div class="msg">{{ message }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <button type="submit" class="login-btn">🔒 Login</button>
+
+            <div class="login-links">
+              <span>New user?</span>
+              <a href="{% url 'client_register' %}">Register as Client</a>
+              <span>•</span>
+              <a href="{% url 'engineer_register' %}">Register as Engineer</a>
+            </div>
+
+            <div class="login-note">
+              Note: Admin Governance access requires user in <b>ADMIN</b> group.
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- SECTION: FEATURES -->
+  <section class="landing-section" id="features">
+    <div class="section-inner">
+      <h2 class="section-title">What we’re good at</h2>
+      <p class="section-sub">
+        A complete SLA lifecycle — from ticket creation to resolution, escalation, and compliance-ready audit trails.
+      </p>
+
+      <div class="cards-4">
+        <div class="info-card">
+          <div class="icon">🎫</div>
+          <h3>Client Ticket Portal</h3>
+          <p>Create tickets, track status, and view SLA deadlines — only your data, secured.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="icon">🧑‍💻</div>
+          <h3>Engineer Console</h3>
+          <p>Assigned ticket view with updates, status control, and escalation awareness.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="icon">⏱</div>
+          <h3>SLA Timers & Alerts</h3>
+          <p>Resolution deadlines, breach detection, and actionable warnings before SLA fails.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="icon">🛡</div>
+          <h3>Governance & Audit</h3>
+          <p>Audit logs, notification trail, and compliance-friendly transparency.</p>
+        </div>
+      </div>
+
+      <div class="section-cta">
+        <a class="solid-btn" href="#login">Login now</a>
+        <a class="ghost-btn" href="#services">View services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: SERVICES -->
+  <section class="landing-section alt" id="services">
+    <div class="section-inner split">
+      <div>
+        <h2 class="section-title">Services built for SLA operations</h2>
+        <p class="section-sub">
+          We focus on reliability and accountability. The platform supports IT ops, security, DB, cloud and incident response teams.
+        </p>
+
+        <ul class="bullet-list">
+          <li><b>Smart category routing</b> to the right team.</li>
+          <li><b>Priority based SLA contracts</b> and resolution targets.</li>
+          <li><b>Risk score + breach indicators</b> for proactive action.</li>
+          <li><b>Reopen support</b> with history tracking.</li>
+        </ul>
+      </div>
+
+      <div class="glass-panel">
+        <div class="glass-title">Supported Domains</div>
+        <div class="tags">
+          <span>DevOps</span><span>Cybersecurity</span><span>Database</span><span>Cloud</span>
+          <span>Network</span><span>SRE</span><span>Incident Response</span><span>AI Ops</span>
+        </div>
+        <div class="glass-small">
+          Configure categories + teams to match your enterprise structure.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: APPROACH -->
+  <section class="landing-section" id="approach">
+    <div class="section-inner">
+      <h2 class="section-title">Our approach</h2>
+      <p class="section-sub">Simple workflow. Strong control. Clear accountability.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Ticket Intake</h3>
+            <p>Client raises a ticket with category + priority for accurate routing.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h3>Assignment & SLA Timer</h3>
+            <p>Engineer assignment with SLA deadline calculation and risk monitoring.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h3>Resolution & Audit Trail</h3>
+            <p>Status updates generate audit logs + notifications for transparency.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div>
+            <h3>Governance & Review</h3>
+            <p>Track breached cases, SLA usage, escalation logs, and compliance reporting.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: BENEFITS -->
+  <section class="landing-section alt" id="benefits">
+    <div class="section-inner">
+      <h2 class="section-title">How you will benefit</h2>
+      <p class="section-sub">
+        Better client experience, faster resolutions, and measurable SLA performance across teams.
+      </p>
+
+      <div class="cards-3">
+        <div class="info-card">
+          <div class="icon">📌</div>
+          <h3>Client Insights</h3>
+          <p>Clients know exactly what’s happening — no confusion, no delays.</p>
+        </div>
+        <div class="info-card">
+          <div class="icon">⚙️</div>
+          <h3>Increased Efficiency</h3>
+          <p>Engineers focus only on assigned work with clear priorities & SLAs.</p>
+        </div>
+        <div class="info-card">
+          <div class="icon">✅</div>
+          <h3>Process Automation</h3>
+          <p>Risk alerts, breach detection and audit trails reduce manual follow-ups.</p>
+        </div>
+      </div>
+
+      <div class="section-cta">
+        <a class="solid-btn" href="#login">Start with login</a>
+        <a class="ghost-btn" href="#contact">Contact</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: CONTACT -->
+  <section class="landing-section" id="contact">
+    <div class="section-inner split">
+      <div>
+        <h2 class="section-title">Contact us</h2>
+        <p class="section-sub">
+          Want to integrate SLA Enterprise into your workflow? Reach out for a demo or project discussion.
+        </p>
+
+        <div class="contact-grid">
+          <div class="contact-box">
+            <b>Email</b>
+            <div class="muted">support@sla-enterprise.local</div>
+          </div>
+          <div class="contact-box">
+            <b>Phone</b>
+            <div class="muted">+91 9XXXXXXXXX</div>
+          </div>
+          <div class="contact-box">
+            <b>Hours</b>
+            <div class="muted">Mon–Sat • 9:00–18:00</div>
+          </div>
+        </div>
+
+        <div class="section-cta">
+          <a class="solid-btn" href="#login">Back to Login</a>
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <div class="glass-title">Why SLA Enterprise?</div>
+        <p class="glass-small">
+          Because SLA is not only a timer — it’s trust. We help you build trust with visibility,
+          governance, and faster resolution.
+        </p>
+        <div class="glass-divider"></div>
+        <div class="glass-small muted">
+          Tip: Use correct ticket <b>Category</b> and <b>Priority</b> for fastest routing.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="landing-footer">
+    <div class="section-inner footer-inner">
+      <div class="footer-left">
+        <div class="brand-mini">
+          <span class="brand-mini__logo">SLA</span>
+          <span class="brand-mini__text">
+            <b>Enterprise</b>
+            <small>AI Powered SLA Governance</small>
+          </span>
+        </div>
+        <div class="muted">© {{ now|default:"2026" }} SLA Enterprise. All rights reserved.</div>
+      </div>
+      <div class="footer-right">
+        <a href="#top">Top</a>
+        <a href="#features">Features</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- NEW: Landing JS -->
+  <script src="{% static 'core/js/login_landing.js' %}"></script>
 </body>
 </html>

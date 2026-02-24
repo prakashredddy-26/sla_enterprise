@@ -1,41 +1,108 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Client Dashboard</title>
-</head>
-<body>
+{% extends "base_client.html" %}
+{% block title %}Client | My Dashboard{% endblock %}
+{% block page_title %}My Dashboard{% endblock %}
+{% block page_subtitle %}Track status, assigned engineer, breach and reopen{% endblock %}
 
-<h2>Client Dashboard</h2>
+{% block content %}
+<div class="flex-between">
+  <div class="flex">
+    <a class="btn" href="{% url 'create_ticket' %}">➕ Create Ticket</a>
+    <a class="btn secondary" href="{% url 'dashboard' %}">🏢 Main Dashboard</a>
+  </div>
 
-<h3>Your Tickets</h3>
-{% if item.ticket.status == "RESOLVED" %}
-    <a href="{% url 'reopen_ticket' item.ticket.id %}">
-        Reopen
-    </a>
-{% endif %}
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Description</th>
-        <th>Priority</th>
-        <th>Status</th>
-        <th>Risk Level</th>
-    </tr>
+  <input
+    class="input"
+    style="max-width:340px;"
+    placeholder="Search my tickets..."
+    data-table-search="#clientTable"
+  >
+</div>
 
-    {% for ticket in tickets %}
-    <tr>
-        <td>{{ ticket.id }}</td>
-        <td>{{ ticket.description }}</td>
-        <td>{{ ticket.priority }}</td>
-        <td>{{ ticket.status }}</td>
-        <td>{{ ticket.risk_level }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="5">No tickets found.</td>
-    </tr>
-    {% endfor %}
-</table>
+<div style="height:14px;"></div>
 
-</body>
-</html>
+<!-- ✅ Updated KPI cards (Removed Help, Added Open Tickets + SLA Met) -->
+<div class="grid">
+  <div class="card col-3">
+    <div class="small">Total Tickets</div>
+    <div class="kpi"><div class="value">{{ total_tickets }}</div></div>
+  </div>
+
+  <div class="card col-3">
+    <div class="small">Open Tickets</div>
+    <div class="kpi"><div class="value">{{ open_tickets }}</div></div>
+    <div class="small">(NEW / IN_PROGRESS / REOPENED)</div>
+  </div>
+
+  <div class="card col-3">
+    <div class="small">SLA Met</div>
+    <div class="kpi"><div class="value">{{ sla_met }}</div></div>
+    <div class="small">(Resolved without breach)</div>
+  </div>
+
+  <div class="card col-3">
+    <div class="small">Breached</div>
+    <div class="kpi"><div class="value">{{ breached_count }}</div></div>
+    <div class="small">(table shows exact)</div>
+  </div>
+</div>
+
+<div style="height:14px;"></div>
+
+<div class="card">
+  <div class="flex-between">
+    <div>
+      <div style="font-weight:950;">🎫 Ticket List</div>
+      <div class="small">Your tickets with engineer assignment and actions</div>
+    </div>
+    <span class="badge neutral">{{ total_tickets }} items</span>
+  </div>
+
+  <div style="height:10px;"></div>
+
+  <div class="table-wrap">
+    <table class="table" id="clientTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>Assigned Engineer</th>
+          <th>Created</th>
+          <th>Risk</th>
+          <th>Breached</th>
+          <th>Reopen</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in tickets %}
+        <tr>
+          <td>#{{ t.id }}</td>
+          <td>{{ t.category }}</td>
+          <td>{{ t.priority }}</td>
+          <td>
+            {% if t.status == "RESOLVED" %}<span class="badge ok">RESOLVED</span>
+            {% elif t.status == "BREACHED" %}<span class="badge bad">BREACHED</span>
+            {% elif t.status == "IN_PROGRESS" %}<span class="badge warn">IN_PROGRESS</span>
+            {% else %}<span class="badge neutral">{{ t.status }}</span>{% endif %}
+          </td>
+          <td>{% if t.assigned_to %}{{ t.assigned_to.username }}{% else %}-{% endif %}</td>
+          <td>{{ t.created_at }}</td>
+          <td>{% if t.risk_level %}<span class="badge neutral">{{ t.risk_level }}</span>{% else %}-{% endif %}</td>
+          <td>{% if t.breached %}<span class="badge bad">YES</span>{% else %}<span class="badge ok">NO</span>{% endif %}</td>
+          <td>
+            {% if t.status == "RESOLVED" %}
+              <a class="btn" href="{% url 'reopen_ticket' t.id %}">Reopen</a>
+            {% else %}
+              <span class="small">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="9" class="small">No tickets yet. Click “Create Ticket”.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

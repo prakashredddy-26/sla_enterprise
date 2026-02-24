@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>{% block title %}Admin | SLA Enterprise{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+  <script defer src="{% static 'core/js/app.js' %}"></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">A</div>
+        <div>
+          <div class="brand-title">Admin Governance</div>
+          <div class="brand-sub">Metrics & Control</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a class="nav-item" href="{% url 'governance_dashboard' %}">🛡️ Governance</a>
+        <a class="nav-item" href="{% url 'dashboard' %}">📊 Dashboard</a>
+        <a class="nav-item" href="/admin/" target="_blank">⚙️ Django Admin</a>
+        <a class="nav-item" href="{% url 'logout' %}">🚪 Logout</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        Tip: SLA Engine & Risk Engine update tickets automatically.
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="top-left">
+          <button class="icon-btn" id="toggleSidebar" type="button">☰</button>
+          <div class="page-title">
+            {% block page_title %}Governance{% endblock %}
+            <div class="page-subtitle">{% block page_subtitle %}SLA health and breaches{% endblock %}</div>
+          </div>
+        </div>
+        <div class="top-right">
+          <div class="chip"><span class="dot"></span><span>Governance Online</span></div>
+          <div class="avatar" title="{{ request.user.username }}">{{ request.user.username|slice:":1"|upper }}</div>
+        </div>
+      </header>
+
+      <section class="content">
+        {% block content %}{% endblock %}
+      </section>
+    </main>
+  </div>
+</body>
+</html>
