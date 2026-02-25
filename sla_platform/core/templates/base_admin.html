@@ -8,9 +8,11 @@
   <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
   <script defer src="{% static 'core/js/app.js' %}"></script>
 </head>
-<body>
+
+<!-- ✅ Light theme for all dashboards - consistent across Client/Engineer/Admin -->
+<body class="app-theme-light">
   <div class="app">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div class="brand-logo">A</div>
         <div>
@@ -42,7 +44,31 @@
         </div>
         <div class="top-right">
           <div class="chip"><span class="dot"></span><span>Governance Online</span></div>
-          <div class="avatar" title="{{ request.user.username }}">{{ request.user.username|slice:":1"|upper }}</div>
+          
+          <!-- ✅ Clickable profile avatar -->
+          <button class="avatar avatar-btn" id="profileBtn" type="button"
+                  aria-haspopup="true" aria-expanded="false"
+                  title="{{ request.user.username }}">
+            {{ request.user.username|slice:":1"|upper }}
+          </button>
+
+          <!-- ✅ Profile dropdown -->
+          <div class="profile-menu" id="profileMenu" aria-hidden="true">
+            <div class="profile-head">
+              <div class="profile-avatar">{{ request.user.username|slice:":1"|upper }}</div>
+              <div>
+                <div class="profile-name">{{ request.user.username }}</div>
+                <div class="profile-email">
+                  {% if request.user.email %}{{ request.user.email }}{% else %}No email set{% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-actions">
+              <a class="profile-link" href="{% url 'password_change' %}">🔒 Change Password</a>
+              <a class="profile-link danger" href="{% url 'logout' %}">🚪 Logout</a>
+            </div>
+          </div>
         </div>
       </header>
 

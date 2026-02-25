@@ -9,27 +9,21 @@
   <script defer src="{% static 'core/js/app.js' %}"></script>
 </head>
 
-<!-- ✅ Light theme only for CLIENT pages -->
-<body class="client-theme-light">
+<!-- ✅ Light theme for all dashboards - consistent across Client/Engineer/Admin -->
+<body class="app-theme-light">
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div class="brand-logo">C</div>
         <div>
-          <!-- ✅ Fix name -->
           <div class="brand-title">My Portal</div>
           <div class="brand-sub">Raise & Track SLA Tickets</div>
         </div>
       </div>
 
       <nav class="nav">
-        <!-- ✅ Clear menu naming -->
         <a class="nav-item" href="{% url 'client_dashboard' %}">📊 My Dashboard</a>
-        <a class="nav-item" href="{% url 'client_dashboard' %}">🎫 My Tickets</a>
-
-        <!-- ✅ Removed duplicate Create Ticket from sidebar -->
-        <!-- <a class="nav-item" href="{% url 'create_ticket' %}">➕ Create Ticket</a> -->
-
+        <a class="nav-item" href="{% url 'create_ticket' %}">➕ Create Ticket</a>
         <a class="nav-item" href="{% url 'dashboard' %}">🏢 Main Dashboard</a>
         <a class="nav-item" href="{% url 'logout' %}">🚪 Logout</a>
       </nav>
@@ -42,7 +36,6 @@
     <main class="main">
       <header class="topbar">
         <div class="top-left">
-          <!-- ✅ Working hamburger -->
           <button class="icon-btn" id="toggleSidebar" type="button" aria-label="Toggle sidebar">☰</button>
 
           <div class="page-title">
@@ -54,12 +47,10 @@
         <div class="top-right">
           <div class="chip"><span class="dot"></span><span>Support Online</span></div>
 
-          <!-- ✅ Clickable profile avatar -->
           <button class="avatar avatar-btn" id="profileBtn" type="button" aria-haspopup="true" aria-expanded="false" title="{{ request.user.username }}">
             {{ request.user.username|slice:":1"|upper }}
           </button>
 
-          <!-- ✅ Profile dropdown -->
           <div class="profile-menu" id="profileMenu" aria-hidden="true">
             <div class="profile-head">
               <div class="profile-avatar">{{ request.user.username|slice:":1"|upper }}</div>

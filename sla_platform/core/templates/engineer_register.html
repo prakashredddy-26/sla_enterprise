@@ -6,45 +6,187 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Engineer Register | SLA Governance</title>
   <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+  <style>
+    /* Match client dashboard light theme */
+    body {
+      background: #eef2f7 !important;
+      color: #0b1220 !important;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .register-card {
+      background: #ffffff !important;
+      border: 1px solid rgba(15,23,42,.10) !important;
+      border-radius: 22px;
+      box-shadow: 0 16px 40px rgba(2,6,23,.12) !important;
+      padding: 32px;
+      max-width: 480px;
+      width: 100%;
+    }
+    
+    .register-title {
+      font-size: 28px;
+      font-weight: 950;
+      color: #0b1220 !important;
+      margin: 0 0 8px;
+    }
+    
+    .register-sub {
+      color: rgba(15,23,42,.65) !important;
+      font-size: 14px;
+      margin: 0 0 24px;
+    }
+    
+    .form-label {
+      display: block;
+      color: rgba(15,23,42,.78) !important;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(15,23,42,.14) !important;
+      background: #ffffff !important;
+      color: #0b1220 !important;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      outline: none;
+    }
+    
+    .form-input:focus {
+      border-color: rgba(37,99,235,.75) !important;
+      box-shadow: 0 0 0 4px rgba(37,99,235,.18) !important;
+    }
+    
+    .form-input::placeholder {
+      color: rgba(15,23,42,.45) !important;
+    }
+    
+    .btn-register {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 14px;
+      border: none !important;
+      background: linear-gradient(90deg,#2563eb,#06b6d4) !important;
+      color: #ffffff !important;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 14px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    
+    .btn-register:hover {
+      filter: brightness(1.05);
+    }
+    
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,.14) !important;
+      background: #ffffff !important;
+      color: #0b1220 !important;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 14px;
+      width: 100%;
+    }
+    
+    .btn-back:hover {
+      background: #f1f5f9 !important;
+    }
+    
+    .success-message {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(57,217,138,.12);
+      border: 1px solid rgba(57,217,138,.28);
+      color: #0b1220 !important;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .features-list {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(15,23,42,.10);
+    }
+    
+    .features-title {
+      font-weight: 950;
+      color: #0b1220 !important;
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+    
+    .features-title + ul {
+      margin: 0;
+      padding-left: 18px;
+      color: rgba(15,23,42,.65) !important;
+      line-height: 1.8;
+    }
+  </style>
 </head>
 <body>
-  <div class="auth">
-    <div class="auth-card">
-      <div class="auth-left">
-        <h1 class="auth-title">Engineer Registration</h1>
-        <p class="auth-sub">Create an engineer account to work on assigned tickets.</p>
-
-        <form method="POST" action="{% url 'engineer_register' %}">
-          {% csrf_token %}
-
-          <label class="label">Username</label>
-          <input class="input" type="text" name="username" required placeholder="Engineer username">
-
-          <div style="height:12px;"></div>
-
-          <label class="label">Email</label>
-          <input class="input" type="email" name="email" required placeholder="engineer@example.com">
-
-          <div style="height:12px;"></div>
-
-          <label class="label">Password</label>
-          <input class="input" type="password" name="password" required placeholder="Create password">
-
-          <div style="height:14px;"></div>
-
-          <button class="btn" type="submit">🛠️ Register Engineer</button>
-          <a class="btn secondary" href="{% url 'login' %}">Back to Login</a>
-        </form>
+  <div class="register-card">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="success-message">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    
+    {% if success_message %}
+      <div class="success-message">
+        ✅ {{ success_message }}<br>
+        <small style="font-weight: 600;">Please login with your credentials.</small>
       </div>
+    {% endif %}
+    
+    <h1 class="register-title">Engineer Registration</h1>
+    <p class="register-sub">Create an engineer account to work on assigned tickets.</p>
 
-      <div class="auth-right">
-        <h3 style="margin:0 0 10px;">Engineer Workflow</h3>
-        <ul class="small" style="margin:0; padding-left:18px;">
-          <li>View assigned tickets on Dashboard</li>
-          <li>Update ticket status to IN_PROGRESS / RESOLVED</li>
-          <li>Notifications generated on assignment & reopen</li>
-        </ul>
-      </div>
+    <form method="POST" action="{% url 'engineer_register' %}">
+      {% csrf_token %}
+
+      <label class="form-label">Username</label>
+      <input class="form-input" type="text" name="username" required placeholder="Engineer username">
+
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" name="email" required placeholder="engineer@example.com">
+
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" name="password" required placeholder="Create password">
+
+      <button class="btn-register" type="submit">🛠️ Register Engineer</button>
+      <a class="btn-back" href="{% url 'login' %}">Back to Login</a>
+    </form>
+    
+    <div class="features-list">
+      <h3 class="features-title">Engineer Workflow</h3>
+      <ul>
+        <li>View assigned tickets on Dashboard</li>
+        <li>Update ticket status to IN_PROGRESS / RESOLVED</li>
+        <li>Notifications generated on assignment & reopen</li>
+      </ul>
     </div>
   </div>
 </body>

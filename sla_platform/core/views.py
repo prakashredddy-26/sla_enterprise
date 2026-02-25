@@ -44,6 +44,7 @@ def is_client(user):
 # ---------------- CLIENT REGISTER ---------------- #
 
 def client_register(request):
+    success_message = None
     if request.method == "POST":
         print("REGISTER FUNCTION CALLED")
 
@@ -75,14 +76,15 @@ def client_register(request):
 
         print("Client profile created")
 
-        return HttpResponse("Client Registered Successfully")
+        success_message = "Client Registered Successfully! You can now login."
 
-    return render(request, "client_register.html")
+    return render(request, "client_register.html", {"success_message": success_message})
 
 
 # ---------------- ENGINEER REGISTER ---------------- #
 
 def engineer_register(request):
+    success_message = None
     if request.method == "POST":
         username = request.POST.get("username")
         email = request.POST.get("email")
@@ -103,9 +105,9 @@ def engineer_register(request):
         group, created = Group.objects.get_or_create(name='ENGINEERS')
         user.groups.add(group)
 
-        return HttpResponse("Engineer Registered Successfully")
+        success_message = "Engineer Registered Successfully! You can now login."
 
-    return render(request, "engineer_register.html")
+    return render(request, "engineer_register.html", {"success_message": success_message})
 
 
 # ---------------- MAIN DASHBOARD ---------------- #

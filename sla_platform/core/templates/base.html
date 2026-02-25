@@ -10,8 +10,8 @@
   {% block extra_head %}{% endblock %}
 </head>
 
-<!-- ✅ Light theme for Engineer dashboard (reference style) -->
-<body class="{% if is_engineer %}app-theme-light{% endif %}">
+<!-- ✅ Light theme for all dashboards - consistent across Client/Engineer/Admin -->
+<body class="app-theme-light">
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
@@ -24,12 +24,15 @@
 
       <nav class="nav">
         <a class="nav-item" href="{% url 'dashboard' %}">
-          📊 {% if is_client %}My Dashboard{% else %}Dashboard{% endif %}
+          📊 Dashboard
         </a>
 
-        <a class="nav-item" href="{% url 'client_dashboard' %}">
-          🎫 {% if is_client %}My Tickets{% else %}Client Tickets{% endif %}
-        </a>
+        {% if is_client %}
+          <a class="nav-item" href="{% url 'create_ticket' %}">➕ Create Ticket</a>
+          <a class="nav-item" href="{% url 'client_dashboard' %}">🎫 My Tickets</a>
+        {% else %}
+          <a class="nav-item" href="{% url 'client_dashboard' %}">🎫 Client Tickets</a>
+        {% endif %}
 
         {% if not is_client %}
           <a class="nav-item" href="{% url 'governance_dashboard' %}">🛡️ Governance</a>
