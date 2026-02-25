@@ -195,10 +195,11 @@ code{ background: rgba(255,255,255,.07); padding:2px 6px; border-radius:8px; bor
   font-size:12px;
   border:1px solid var(--border);
 }
-.badge.ok{ background: rgba(57,217,138,.12); border-color: rgba(57,217,138,.28); }
-.badge.warn{ background: rgba(255,209,102,.12); border-color: rgba(255,209,102,.28); }
-.badge.bad{ background: rgba(255,92,122,.12); border-color: rgba(255,92,122,.28); }
-.badge.neutral{ background: rgba(110,168,254,.10); border-color: rgba(110,168,254,.25); }
+.badge.ok{ background: #D1FAE5 !important; color: #065F46 !important; border: none !important; }
+.badge.warn{ background: #FEF3C7 !important; color: #92400E !important; border: none !important; }
+.badge.bad{ background: #FEE2E2 !important; color: #991B1B !important; border: none !important; }
+.badge.neutral{ background: #E5E7EB !important; color: #374151 !important; border: none !important; }
+.badge.within-sla{ background: #DBEAFE !important; color: #1E40AF !important; border: none !important; }
 
 /* Tables */
 .table-wrap{ overflow:auto; border-radius:14px; border:1px solid var(--border); }
@@ -250,6 +251,12 @@ code{ background: rgba(255,255,255,.07); padding:2px 6px; border-radius:8px; bor
 .flex-between{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
 
 .kpi .value{ font-size:26px; font-weight:950; }
+.kpi{ padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E5E7EB; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.kpi .value{ color: #111827; }
+.kpi.breached{ background: linear-gradient(135deg, #EF4444, #DC2626); border: none; color: #FFFFFF; }
+.kpi.breached .value{ color: #FFFFFF; }
+.kpi.breached .label{ color: #FFFFFF !important; margin: 0; }
+
 .small{ font-size:12px; color:var(--muted); line-height:1.55; }
 
 /* =========================================================
@@ -359,58 +366,58 @@ body.auth-body{
 .auth{ min-height:100vh; display:flex; justify-content:center; align-items:center; padding:40px; }
 
 /* =========================================================
-   ✅ CLIENT THEME (Matches your reference "SLA System" screenshot)
+   ✅ CLIENT THEME (Updated with new color scheme)
    Body must have class: client-theme-light
    ========================================================= */
 body.client-theme-light{
-  background: #eef2f7 !important;   /* light grey page bg */
-  color: #0b1220 !important;
+  background: #F4F6F9 !important;   /* Very light cool gray */
+  color: #374151 !important;        /* Normal text color */
 }
 
 /* main content should not be dark */
 body.client-theme-light .main{ background: transparent; }
 
-/* Sidebar: blue, like reference */
+/* Sidebar: Updated gradient */
 body.client-theme-light .sidebar{
-  background: linear-gradient(180deg, #1e3a8a, #1e40af) !important;
-  border-right: 1px solid rgba(255,255,255,.20) !important;
-  box-shadow: 0 16px 40px rgba(2,6,23,.12) !important;
+  background: linear-gradient(180deg, #1E3A5F 0%, #2C4C74 100%) !important;
+  border-right: 1px solid rgba(255,255,255,.15) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
 }
 
 /* Brand block inside sidebar */
 body.client-theme-light .brand{
-  background: rgba(255,255,255,.10) !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
   box-shadow: none !important;
 }
 body.client-theme-light .brand-logo{
-  background: rgba(255,255,255,.18) !important;
-  border: 1px solid rgba(255,255,255,.25) !important;
+  background: rgba(255,255,255,.12) !important;
+  border: 1px solid rgba(255,255,255,.20) !important;
   color: #ffffff !important;
 }
-body.client-theme-light .brand-title{ color:#ffffff !important; }
-body.client-theme-light .brand-sub{ color: rgba(255,255,255,.80) !important; }
+body.client-theme-light .brand-title{ color:#FFFFFF !important; }
+body.client-theme-light .brand-sub{ color: #E5EAF1 !important; }
 
 /* Sidebar nav items */
 body.client-theme-light .nav-item{
-  background: rgba(255,255,255,.10) !important;
-  border: 1px solid rgba(255,255,255,.18) !important;
-  color: rgba(255,255,255,.92) !important;
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: #E5EAF1 !important;        /* Sidebar text normal */
 }
 body.client-theme-light .nav-item:hover{
-  background: rgba(255,255,255,.16) !important;
-  border-color: rgba(255,255,255,.25) !important;
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,.18) !important;
 }
 body.client-theme-light .nav-item.active{
-  background: rgba(255,255,255,.22) !important;
-  border-color: rgba(255,255,255,.35) !important;
+  background: #2F5B8A !important;   /* Active item background */
+  border-color: rgba(255,255,255,.25) !important;
 }
 
 /* Sidebar footer: visible on blue */
 body.client-theme-light .sidebar-footer{
-  background: rgba(255,255,255,.12) !important;
-  border: 1px solid rgba(255,255,255,.20) !important;
-  color: rgba(255,255,255,.92) !important;
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  color: #E5EAF1 !important;
 }
 
 /* Topbar: clean light */
@@ -420,122 +427,234 @@ body.client-theme-light .topbar{
 
 /* Hamburger button (light) */
 body.client-theme-light .icon-btn{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.14) !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #1F2937 !important;
+}
+body.client-theme-light .page-title{
+  color: #1F2937 !important;        /* Main headings */
 }
 body.client-theme-light .page-subtitle{
-  color: rgba(15,23,42,.60) !important;
+  color: #6B7280 !important;        /* Muted labels */
 }
 
 /* Chip (support online) */
 body.client-theme-light .chip{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.12) !important;
-  color: rgba(15,23,42,.70) !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #6B7280 !important;
 }
 
 /* Avatar button: visible on light */
 body.client-theme-light .avatar{
-  background: #e0efff !important;
-  border: 1px solid rgba(37,99,235,.20) !important;
-  color: #0b1220 !important;
+  background: #DBEAFE !important;
+  border: 1px solid #BFDBFE !important;
+  color: #1E40AF !important;
 }
 
 /* Cards: white with soft shadow */
 body.client-theme-light .card{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.10) !important;
-  box-shadow: 0 14px 36px rgba(2,6,23,.08) !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+  color: #1F2937 !important;
 }
 body.client-theme-light .small{
-  color: rgba(15,23,42,.60) !important;
+  color: #6B7280 !important;
 }
 
 /* Table: light */
 body.client-theme-light .table-wrap{
-  border: 1px solid rgba(15,23,42,.10) !important;
-  background: #ffffff !important;
+  border: 1px solid #E5E7EB !important;
+  background: #FFFFFF !important;
 }
 body.client-theme-light .table th{
-  background: #f3f6fb !important;
-  color: rgba(15,23,42,.70) !important;
+  background: #F3F4F6 !important;
+  color: #374151 !important;
+  border-bottom: 1px solid #E5E7EB !important;
 }
 body.client-theme-light .table td{
-  color: rgba(15,23,42,.85) !important;
+  color: #374151 !important;
+  border-bottom: 1px solid #E5E7EB !important;
 }
 body.client-theme-light .table tr:hover td{
-  background: #f1f5f9 !important;
+  background: #F9FAFB !important;
 }
 
 /* Inputs: white and readable */
 body.client-theme-light .input,
 body.client-theme-light .select,
 body.client-theme-light .textarea{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.14) !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #1F2937 !important;
 }
 body.client-theme-light .input::placeholder{
-  color: rgba(15,23,42,.45) !important;
+  color: #9CA3AF !important;
+}
+body.client-theme-light .label{
+  color: #6B7280 !important;
 }
 
-/* Buttons: match your current premium blue */
+/* Buttons */
 body.client-theme-light .btn{
   border: none !important;
-  background: linear-gradient(90deg,#2563eb,#06b6d4) !important;
-  color: #ffffff !important;
+  background: #2563EB !important;
+  color: #FFFFFF !important;
 }
 body.client-theme-light .btn:hover{
-  filter: brightness(1.02);
+  background: #1D4ED8 !important;
 }
 body.client-theme-light .btn.secondary{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.14) !important;
-  color: #0b1220 !important;
+  background: #E5E7EB !important;
+  border: none !important;
+  color: #374151 !important;
+}
+body.client-theme-light .btn.secondary:hover{
+  background: #D1D5DB !important;
+}
+body.client-theme-light .btn.danger{
+  background: #DC2626 !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+body.client-theme-light .btn.danger:hover{
+  background: #B91C1C !important;
+}
+
+/* Status badges - Client theme */
+body.client-theme-light .badge.ok{ 
+  background: #D1FAE5 !important; 
+  color: #065F46 !important; 
+  border: none !important;
+}
+body.client-theme-light .badge.warn{ 
+  background: #FEF3C7 !important; 
+  color: #92400E !important; 
+  border: none !important;
+}
+body.client-theme-light .badge.bad{ 
+  background: #FEE2E2 !important; 
+  color: #991B1B !important; 
+  border: none !important;
+}
+body.client-theme-light .badge.neutral{ 
+  background: #E5E7EB !important; 
+  color: #374151 !important; 
+  border: none !important;
+}
+body.client-theme-light .badge.within-sla{ 
+  background: #DBEAFE !important; 
+  color: #1E40AF !important; 
+  border: none !important;
+}
+
+/* KPI Cards - Client theme */
+body.client-theme-light .kpi{
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+body.client-theme-light .kpi .value{
+  color: #111827 !important;
+}
+body.client-theme-light .kpi .label{
+  color: #6B7280 !important;
+}
+body.client-theme-light .kpi.breached{
+  background: linear-gradient(135deg, #EF4444, #DC2626) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+body.client-theme-light .kpi.breached .value{
+  color: #FFFFFF !important;
+}
+body.client-theme-light .kpi.breached .label{
+  color: #FFFFFF !important;
+}
+
+/* Profile menu - Client theme */
+body.client-theme-light .profile-menu{
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+body.client-theme-light .profile-head{
+  background: #F3F4F6 !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+body.client-theme-light .profile-avatar{
+  background: linear-gradient(135deg, #2563EB, #06B6D4) !important;
+  color: #FFFFFF !important;
+}
+
+body.client-theme-light .profile-name{
+  color: #1F2937 !important;
+}
+
+body.client-theme-light .profile-email{
+  color: #6B7280 !important;
+}
+
+body.client-theme-light .profile-link{
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #374151 !important;
+}
+
+body.client-theme-light .profile-link:hover{
+  background: #F3F4F6 !important;
+  border-color: #2563EB !important;
+}
+
+body.client-theme-light .profile-link.danger:hover{
+  background: rgba(220, 38, 38, 0.10) !important;
+  border-color: #DC2626 !important;
 }
 
 /* =========================================================
-   ENGINEER LIGHT THEME (matches your reference screenshot)
+   ENGINEER LIGHT THEME (Updated color scheme)
    SAFE: only affects body.engineer-theme-light
    ========================================================= */
 
 body.engineer-theme-light{
-  background: #f3f5f9 !important;
-  color: #0b1220 !important;
+  background: #F4F6F9 !important;
+  color: #374151 !important;
 }
 
-/* Sidebar (blue gradient like reference) */
+/* Sidebar (blue gradient) */
 body.engineer-theme-light .sidebar{
-  background: linear-gradient(180deg, #1f3a5b, #162a43) !important;
-  border-right: 1px solid rgba(15,23,42,.10) !important;
-  box-shadow: 0 10px 28px rgba(2,6,23,.10) !important;
-  color: #ffffff !important;
+  background: linear-gradient(180deg, #1E3A5F 0%, #2C4C74 100%) !important;
+  border-right: 1px solid rgba(255,255,255,.15) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+  color: #E5EAF1 !important;
 }
 
 body.engineer-theme-light .brand{
   background: rgba(255,255,255,.08) !important;
-  border: 1px solid rgba(255,255,255,.12) !important;
-  box-shadow: 0 10px 24px rgba(2,6,23,.10) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  box-shadow: none !important;
 }
 
 body.engineer-theme-light .brand-title,
 body.engineer-theme-light .brand-sub{
-  color: rgba(255,255,255,.92) !important;
+  color: #E5EAF1 !important;
 }
 
 body.engineer-theme-light .nav-item{
   background: rgba(255,255,255,.08) !important;
   border: 1px solid rgba(255,255,255,.12) !important;
-  color: rgba(255,255,255,.92) !important;
+  color: #E5EAF1 !important;
 }
 body.engineer-theme-light .nav-item:hover{
-  background: rgba(255,255,255,.14) !important;
+  background: rgba(255,255,255,0.08) !important;
 }
 body.engineer-theme-light .nav-item.active{
-  background: rgba(255,255,255,.18) !important;
-  border-color: rgba(255,255,255,.22) !important;
+  background: #2F5B8A !important;
+  border-color: rgba(255,255,255,.25) !important;
 }
 
 /* Main area */
@@ -543,144 +662,389 @@ body.engineer-theme-light .topbar{
   background: transparent !important;
 }
 body.engineer-theme-light .page-title{
-  color: #0b1220 !important;
+  color: #1F2937 !important;
 }
 body.engineer-theme-light .page-subtitle{
-  color: rgba(15,23,42,.60) !important;
+  color: #6B7280 !important;
 }
 
 body.engineer-theme-light .icon-btn{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.12) !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #1F2937 !important;
 }
 
 body.engineer-theme-light .chip{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.10) !important;
-  color: rgba(15,23,42,.65) !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #6B7280 !important;
 }
 
-/* Cards (white cards like reference) */
+/* Cards (white cards) */
 body.engineer-theme-light .card{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.10) !important;
-  box-shadow: 0 16px 40px rgba(2,6,23,.08) !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+  color: #1F2937 !important;
 }
 body.engineer-theme-light .small{
-  color: rgba(15,23,42,.60) !important;
+  color: #6B7280 !important;
 }
 
 /* Table */
 body.engineer-theme-light .table-wrap{
-  border: 1px solid rgba(15,23,42,.10) !important;
+  border: 1px solid #E5E7EB !important;
 }
 body.engineer-theme-light .table th{
-  background: #f8fafc !important;
-  color: rgba(15,23,42,.70) !important;
+  background: #F3F4F6 !important;
+  color: #374151 !important;
+  border-bottom: 1px solid #E5E7EB !important;
 }
 body.engineer-theme-light .table td{
-  color: rgba(15,23,42,.85) !important;
+  color: #374151 !important;
+  border-bottom: 1px solid #E5E7EB !important;
 }
 body.engineer-theme-light .table tr:hover td{
-  background: #f1f5f9 !important;
+  background: #F9FAFB !important;
 }
 
 /* Inputs */
 body.engineer-theme-light .input,
 body.engineer-theme-light .select,
 body.engineer-theme-light .textarea{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.14) !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #1F2937 !important;
 }
 body.engineer-theme-light .input::placeholder{
-  color: rgba(15,23,42,.45) !important;
+  color: #9CA3AF !important;
+}
+body.engineer-theme-light .label{
+  color: #6B7280 !important;
 }
 
 /* Profile dropdown stays readable in light theme */
 body.engineer-theme-light .profile-menu{
-  background: #ffffff !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+}
+
+/* Status badges - Engineer theme */
+body.engineer-theme-light .badge.ok{ 
+  background: #D1FAE5 !important; 
+  color: #065F46 !important; 
+  border: none !important;
+}
+body.engineer-theme-light .badge.warn{ 
+  background: #FEF3C7 !important; 
+  color: #92400E !important; 
+  border: none !important;
+}
+body.engineer-theme-light .badge.bad{ 
+  background: #FEE2E2 !important; 
+  color: #991B1B !important; 
+  border: none !important;
+}
+body.engineer-theme-light .badge.neutral{ 
+  background: #E5E7EB !important; 
+  color: #374151 !important; 
+  border: none !important;
+}
+body.engineer-theme-light .badge.within-sla{ 
+  background: #DBEAFE !important; 
+  color: #1E40AF !important; 
+  border: none !important;
+}
+
+/* KPI Cards - Engineer theme */
+body.engineer-theme-light .kpi{
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+body.engineer-theme-light .kpi .value{
+  color: #111827 !important;
+}
+body.engineer-theme-light .kpi .label{
+  color: #6B7280 !important;
+}
+body.engineer-theme-light .kpi.breached{
+  background: linear-gradient(135deg, #EF4444, #DC2626) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+body.engineer-theme-light .kpi.breached .value{
+  color: #FFFFFF !important;
+}
+body.engineer-theme-light .kpi.breached .label{
+  color: #FFFFFF !important;
+}
+
+/* Profile menu - Engineer theme */
+body.engineer-theme-light .profile-menu{
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+body.engineer-theme-light .profile-head{
+  background: #F3F4F6 !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+body.engineer-theme-light .profile-avatar{
+  background: linear-gradient(135deg, #2563EB, #06B6D4) !important;
+  color: #FFFFFF !important;
+}
+
+body.engineer-theme-light .profile-name{
+  color: #1F2937 !important;
+}
+
+body.engineer-theme-light .profile-email{
+  color: #6B7280 !important;
+}
+
+body.engineer-theme-light .profile-link{
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #374151 !important;
+}
+
+body.engineer-theme-light .profile-link:hover{
+  background: #F3F4F6 !important;
+  border-color: #2563EB !important;
+}
+
+body.engineer-theme-light .profile-link.danger:hover{
+  background: rgba(220, 38, 38, 0.10) !important;
+  border-color: #DC2626 !important;
 }
 
 
 /* =========================================================
-   ENGINEER LIGHT THEME (same reference style as client)
+   ✅ APP LIGHT THEME (All 3 dashboards use this)
+   Updated with new color scheme
    ========================================================= */
 
 /* Make engineer base.html use the same light theme rules */
 body.app-theme-light{
-  background: #f3f5f9 !important;
-  color: #0b1220 !important;
+  background: #F4F6F9 !important;
+  color: #374151 !important;
 }
 
 body.app-theme-light .main{ background: transparent; }
 
 body.app-theme-light .sidebar{
-  background: #ffffff !important;
-  border-right: 1px solid rgba(15,23,42,.10) !important;
-  box-shadow: 0 10px 28px rgba(2,6,23,.06) !important;
+  background: linear-gradient(180deg, #1E3A5F 0%, #2C4C74 100%) !important;
+  border-right: 1px solid rgba(255,255,255,.15) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
 }
 
 body.app-theme-light .brand{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.10) !important;
-  box-shadow: 0 10px 24px rgba(2,6,23,.06) !important;
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  box-shadow: none !important;
 }
 
-body.app-theme-light .brand-sub{ color: rgba(15,23,42,.60) !important; }
+body.app-theme-light .brand-title{ color: #FFFFFF !important; }
+body.app-theme-light .brand-sub{ color: #E5EAF1 !important; }
 
 body.app-theme-light .nav-item{
-  background: #f8fafc !important;
-  border: 1px solid rgba(15,23,42,.08) !important;
-  color: rgba(15,23,42,.85) !important;
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: #E5EAF1 !important;
 }
 body.app-theme-light .nav-item:hover{
-  background: #eef2ff !important;
-  border-color: rgba(37,99,235,.20) !important;
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+body.app-theme-light .nav-item.active{
+  background: #2F5B8A !important;
+  border-color: rgba(255,255,255,.25) !important;
+}
+
+body.app-theme-light .sidebar-footer{
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  color: #E5EAF1 !important;
 }
 
 body.app-theme-light .icon-btn{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.12) !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #1F2937 !important;
 }
-body.app-theme-light .page-subtitle{ color: rgba(15,23,42,.60) !important; }
+body.app-theme-light .page-title{ color: #1F2937 !important; }
+body.app-theme-light .page-subtitle{ color: #6B7280 !important; }
 
 body.app-theme-light .chip{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.10) !important;
-  color: rgba(15,23,42,.65) !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #6B7280 !important;
 }
 
 /* Cards white + clean */
 body.app-theme-light .card{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.10) !important;
-  box-shadow: 0 16px 40px rgba(2,6,23,.08) !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+  color: #1F2937 !important;
 }
-body.app-theme-light .small{ color: rgba(15,23,42,.60) !important; }
+body.app-theme-light .small{ color: #6B7280 !important; }
+body.app-theme-light .label{ color: #6B7280 !important; }
 
 /* Table light */
-body.app-theme-light .table-wrap{ border: 1px solid rgba(15,23,42,.10) !important; }
-body.app-theme-light .table th{
-  background: #f8fafc !important;
-  color: rgba(15,23,42,.70) !important;
+body.app-theme-light .table-wrap{ 
+  border: 1px solid #E5E7EB !important;
+  background: #FFFFFF !important;
 }
-body.app-theme-light .table td{ color: rgba(15,23,42,.85) !important; }
-body.app-theme-light .table tr:hover td{ background: #f1f5f9 !important; }
+body.app-theme-light .table th{
+  background: #F3F4F6 !important;
+  color: #374151 !important;
+  border-bottom: 1px solid #E5E7EB !important;
+}
+body.app-theme-light .table td{ 
+  color: #374151 !important;
+  border-bottom: 1px solid #E5E7EB !important;
+}
+body.app-theme-light .table tr:hover td{ background: #F9FAFB !important; }
 
 /* Inputs light */
 body.app-theme-light .input,
 body.app-theme-light .select,
 body.app-theme-light .textarea{
-  background: #ffffff !important;
-  border: 1px solid rgba(15,23,42,.14) !important;
-  color: #0b1220 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #1F2937 !important;
 }
 body.app-theme-light .input::placeholder{
-  color: rgba(15,23,42,.45) !important;
+  color: #9CA3AF !important;
+}
+
+/* Buttons */
+body.app-theme-light .btn{
+  border: none !important;
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+}
+body.app-theme-light .btn:hover{
+  background: #1D4ED8 !important;
+}
+body.app-theme-light .btn.secondary{
+  background: #E5E7EB !important;
+  border: none !important;
+  color: #374151 !important;
+}
+body.app-theme-light .btn.secondary:hover{
+  background: #D1D5DB !important;
+}
+body.app-theme-light .btn.danger{
+  background: #DC2626 !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+body.app-theme-light .btn.danger:hover{
+  background: #B91C1C !important;
+}
+
+/* Avatar button */
+body.app-theme-light .avatar{
+  background: #DBEAFE !important;
+  border: 1px solid #BFDBFE !important;
+  color: #1E40AF !important;
+}
+
+/* Profile menu */
+body.app-theme-light .profile-menu{
+  background: #FFFFFF !important;
+  color: #1F2937 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+body.app-theme-light .profile-head{
+  background: #F3F4F6 !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+body.app-theme-light .profile-avatar{
+  background: linear-gradient(135deg, #2563EB, #06B6D4) !important;
+  color: #FFFFFF !important;
+}
+
+body.app-theme-light .profile-name{
+  color: #1F2937 !important;
+}
+
+body.app-theme-light .profile-email{
+  color: #6B7280 !important;
+}
+
+body.app-theme-light .profile-link{
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  color: #374151 !important;
+}
+
+body.app-theme-light .profile-link:hover{
+  background: #F3F4F6 !important;
+  border-color: #2563EB !important;
+}
+
+body.app-theme-light .profile-link.danger:hover{
+  background: rgba(220, 38, 38, 0.10) !important;
+  border-color: #DC2626 !important;
+}
+
+/* Status badges - Light theme */
+body.app-theme-light .badge.ok{ 
+  background: #D1FAE5 !important; 
+  color: #065F46 !important; 
+  border: none !important;
+}
+body.app-theme-light .badge.warn{ 
+  background: #FEF3C7 !important; 
+  color: #92400E !important; 
+  border: none !important;
+}
+body.app-theme-light .badge.bad{ 
+  background: #FEE2E2 !important; 
+  color: #991B1B !important; 
+  border: none !important;
+}
+body.app-theme-light .badge.neutral{ 
+  background: #E5E7EB !important; 
+  color: #374151 !important; 
+  border: none !important;
+}
+body.app-theme-light .badge.within-sla{ 
+  background: #DBEAFE !important; 
+  color: #1E40AF !important; 
+  border: none !important;
+}
+
+/* KPI Cards - Light theme */
+body.app-theme-light .kpi{
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+}
+body.app-theme-light .kpi .value{
+  color: #111827 !important;
+}
+body.app-theme-light .kpi .label{
+  color: #6B7280 !important;
+}
+body.app-theme-light .kpi.breached{
+  background: linear-gradient(135deg, #EF4444, #DC2626) !important;
+  border: none !important;
+  color: #FFFFFF !important;
+}
+body.app-theme-light .kpi.breached .value{
+  color: #FFFFFF !important;
+}
+body.app-theme-light .kpi.breached .label{
+  color: #FFFFFF !important;
 }
