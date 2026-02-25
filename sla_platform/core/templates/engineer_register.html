@@ -156,7 +156,7 @@
     
     {% if success_message %}
       <div class="success-message">
-        ✅ {{ success_message }}<br>
+         {{ success_message }}<br>
         <small style="font-weight: 600;">Please login with your credentials.</small>
       </div>
     {% endif %}
@@ -176,7 +176,7 @@
       <label class="form-label">Password</label>
       <input class="form-input" type="password" name="password" required placeholder="Create password">
 
-      <button class="btn-register" type="submit">🛠️ Register Engineer</button>
+      <button class="btn-register" type="submit"> Register Engineer</button>
       <a class="btn-back" href="{% url 'login' %}">Back to Login</a>
     </form>
     

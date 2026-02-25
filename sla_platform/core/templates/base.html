@@ -24,21 +24,21 @@
 
       <nav class="nav">
         <a class="nav-item" href="{% url 'dashboard' %}">
-          📊 Dashboard
+           Dashboard
         </a>
 
         {% if is_client %}
-          <a class="nav-item" href="{% url 'create_ticket' %}">➕ Create Ticket</a>
-          <a class="nav-item" href="{% url 'client_dashboard' %}">🎫 My Tickets</a>
+          <a class="nav-item" href="{% url 'create_ticket' %}"> Create Ticket</a>
+          <a class="nav-item" href="{% url 'client_dashboard' %}"> My Tickets</a>
         {% else %}
-          <a class="nav-item" href="{% url 'client_dashboard' %}">🎫 Client Tickets</a>
+          <a class="nav-item" href="{% url 'client_dashboard' %}"> Client Tickets</a>
         {% endif %}
 
         {% if not is_client %}
-          <a class="nav-item" href="{% url 'governance_dashboard' %}">🛡️ Governance</a>
+          <a class="nav-item" href="{% url 'governance_dashboard' %}"> Governance</a>
         {% endif %}
 
-        <a class="nav-item" href="{% url 'logout' %}">🚪 Logout</a>
+        <a class="nav-item" href="{% url 'logout' %}"> Logout</a>
       </nav>
 
       <div class="sidebar-footer">
@@ -87,8 +87,8 @@
             </div>
 
             <div class="profile-actions">
-              <a class="profile-link" href="{% url 'password_change' %}">🔒 Change Password</a>
-              <a class="profile-link danger" href="{% url 'logout' %}">🚪 Logout</a>
+              <a class="profile-link" href="{% url 'password_change' %}"> Change Password</a>
+              <a class="profile-link danger" href="{% url 'logout' %}"> Logout</a>
             </div>
           </div>
 

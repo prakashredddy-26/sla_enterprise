@@ -9,7 +9,7 @@
   <script defer src="{% static 'core/js/app.js' %}"></script>
 </head>
 
-<!-- ✅ Light theme for all dashboards - consistent across Client/Engineer/Admin -->
+<!--  Light theme for all dashboards - consistent across Client/Engineer/Admin -->
 <body class="app-theme-light">
   <div class="app">
     <aside class="sidebar" id="sidebar">
@@ -22,10 +22,10 @@
       </div>
 
       <nav class="nav">
-        <a class="nav-item" href="{% url 'governance_dashboard' %}">🛡️ Governance</a>
-        <a class="nav-item" href="{% url 'dashboard' %}">📊 Dashboard</a>
-        <a class="nav-item" href="/admin/" target="_blank">⚙️ Django Admin</a>
-        <a class="nav-item" href="{% url 'logout' %}">🚪 Logout</a>
+        <a class="nav-item" href="{% url 'governance_dashboard' %}"> Governance</a>
+        <a class="nav-item" href="{% url 'dashboard' %}"> Dashboard</a>
+        <a class="nav-item" href="/admin/" target="_blank"> Django Admin</a>
+        <a class="nav-item" href="{% url 'logout' %}"> Logout</a>
       </nav>
 
       <div class="sidebar-footer">
@@ -65,8 +65,8 @@
             </div>
 
             <div class="profile-actions">
-              <a class="profile-link" href="{% url 'password_change' %}">🔒 Change Password</a>
-              <a class="profile-link danger" href="{% url 'logout' %}">🚪 Logout</a>
+              <a class="profile-link" href="{% url 'password_change' %}"> Change Password</a>
+              <a class="profile-link danger" href="{% url 'logout' %}"> Logout</a>
             </div>
           </div>
         </div>

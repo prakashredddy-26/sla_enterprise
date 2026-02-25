@@ -10,15 +10,15 @@
 <div class="flex-between">
   <div class="flex">
     {% if is_client %}
-      <a class="btn" href="{% url 'create_ticket' %}">➕ Create Ticket</a>
-      <a class="btn secondary" href="{% url 'client_dashboard' %}">🎫 My Tickets</a>
+      <a class="btn" href="{% url 'create_ticket' %}"> Create Ticket</a>
+      <a class="btn secondary" href="{% url 'client_dashboard' %}"> My Tickets</a>
     {% endif %}
 
     {% if is_engineer %}
       <span class="badge neutral">Engineer Mode</span>
     {% endif %}
 
-    <a class="btn secondary" href="{% url 'governance_dashboard' %}">🛡️ Governance</a>
+    <a class="btn secondary" href="{% url 'governance_dashboard' %}"> Governance</a>
   </div>
 
   <input class="input" style="max-width:320px;" placeholder="Search tickets..." data-table-search="#dashTable">
@@ -30,7 +30,7 @@
   <div class="card">
     <div class="flex-between">
       <div>
-        <div style="font-weight:900;">🔔 New Notifications</div>
+        <div style="font-weight:900;"> New Notifications</div>
         <div style="color:var(--muted); font-size:12px;">Unread updates for you</div>
       </div>
       <span class="badge warn">{{ notifications|length }} unread</span>
@@ -100,7 +100,7 @@
 <div class="card">
   <div class="flex-between">
     <div>
-      <div style="font-weight:900;">📌 Ticket Overview</div>
+      <div style="font-weight:900;"> Ticket Overview</div>
       <div style="color:var(--muted); font-size:12px;">SLA status, remaining time and actions</div>
     </div>
     <span class="badge neutral">Table View</span>
